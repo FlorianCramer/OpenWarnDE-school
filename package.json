@@ -1,0 +1,51 @@
+{
+    "name": "OpenWarnDE_2",
+    "version": "0.2.0",
+    "private": true,
+    "type": "module",
+    "author": {
+        "name": "Flo",
+        "email": "cramerflorian057@gmail.com",
+        "url": "https://floriancramer.github.io/"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/FlorianCramer/OpenWarnDE-school.git"
+    },
+    "funding": {
+        "type": "github",
+        "url": "https://github.com/FlorianCramer/OpenWarnDE-school"
+    },
+    "bugs": {
+        "url": "https://github.com/FlorianCramer/OpenWarnDE-school/issues"
+    },
+    "scripts": {
+        "dev": "concurrently \"npm run dev:srv\" \"npm run dev:app\"",
+        "dev:srv": "npm run dev --prefix server",
+        "dev:app": "npm run dev --prefix client",
+        "build": "npm run build:srv && npm run build:app",
+        "build:srv": "npm run build --prefix server",
+        "build:app": "npm run build --prefix client",
+        "start": "concurrently \"npm run start:srv\" \"npm run start:app\"",
+        "start:srv": "npm run start --prefix server",
+        "start:app": "npm run start --prefix client",
+        "typecheck": "concurrently \"npm run typecheck:srv\" \"npm run typecheck:app\"",
+        "typecheck:srv": "npm run typecheck --prefix server",
+        "typecheck:app": "npm run typecheck --prefix client",
+        "lint": "concurrently \"npm run lint:srv\" \"npm run lint:app\"",
+        "lint:srv": "npm run lint --prefix server",
+        "lint:app": "npm run lint --prefix client",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "devDependencies": {
+        "concurrently": "^10.0.5",
+        "prettier": "^3.4.0"
+    },
+    "keywords": [
+        "openstreetmap",
+        "nextjs",
+        "react"
+    ]
+}
