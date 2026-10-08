@@ -28,23 +28,29 @@ function rainRate([r, g, b, a]: readonly [number, number, number, number]) {
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     if (max < 180 && max - min < 35) return 0;
-    if (r > 210 && g < 120) return 40;
-    if (r > 180 && g > 90 && g < 210 && b < 100) return 15;
-    if (r > 180 && g > 170 && b < 110) return 6;
+    if (r > 210 && g < 120) return 120;
+    if (r > 180 && g > 90 && g < 210 && b < 100) return 30;
+    if (r > 180 && g > 170 && b < 110) return 12;
     if (b > r * 1.25 && b > g * 1.05) return g > 100 ? 2 : 0.5;
-    if (g > r * 1.15 && g > b * 1.05) return 3;
+    if (g > r * 1.15 && g > b * 1.05) return 5;
     return b > r && b > g ? 1 : 0;
 }
 function color(rate: number) {
-    return rate >= 30
-        ? [240, 68, 36]
-        : rate >= 10
-          ? [255, 210, 31]
-          : rate >= 3
-            ? [18, 59, 155]
-            : rate >= 1
-              ? [47, 128, 237]
-              : [155, 220, 247];
+    return rate > 100
+        ? [18, 59, 155]
+        : rate >= 50
+          ? [139, 0, 139]
+          : rate >= 20
+            ? [240, 68, 36]
+            : rate >= 8
+              ? [255, 140, 0]
+              : rate >= 3
+                ? [255, 210, 31]
+                : rate >= 1.5
+                  ? [124, 252, 0]
+                  : rate >= 0.4
+                    ? [0, 128, 0]
+                    : [155, 220, 247];
 }
 /** Farbe encodiert die gemeinsame Intensitätsklasse; Alpha encodiert Quellenkonsens. */
 export function composeConsensusTile(tiles: WeightedTile[]) {

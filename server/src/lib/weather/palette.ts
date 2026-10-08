@@ -1,0 +1,10 @@
+export const WEATHER_LEGEND_8 = [
+    { color: '#9bdcf7', name: 'Hellblau', radar: 'ca. 1–15 dBZ', intensity: 'sehr gering', precipitation: '< 0,4 mm/h', description: 'Kein oder nur geringer Niederschlag; häufig Sprühregen bzw. einzelne Tropfen', label: '< 0,4 mm/h · sehr gering' },
+    { color: '#008000', name: 'Grün', radar: 'ca. 15–25 dBZ', intensity: 'leicht', precipitation: 'ca. 0,4–1,5 mm/h', description: 'Leichter Niederschlag, z. B. leichter Landregen', label: '0,4–1,5 mm/h · leicht' },
+    { color: '#7CFC00', name: 'Hellgrün', radar: 'ca. 25–30 dBZ', intensity: 'leicht bis mäßig', precipitation: 'ca. 1,5–3 mm/h', description: 'Leichter bis mäßiger Regen', label: '1,5–3 mm/h · leicht bis mäßig' },
+    { color: '#ffd21f', name: 'Gelb', radar: 'ca. 30–35 dBZ', intensity: 'mäßig', precipitation: 'ca. 3–8 mm/h', description: 'Mäßiger bis zunehmend kräftiger Niederschlag', label: '3–8 mm/h · mäßig' },
+    { color: '#ff8c00', name: 'Orange', radar: 'ca. 35–40/45 dBZ', intensity: 'stark', precipitation: 'ca. 8–20 mm/h', description: 'Kräftiger Niederschlag bzw. stärkere Schauer', label: '8–20 mm/h · stark' },
+    { color: '#f04424', name: 'Rot', radar: 'ca. 45–55 dBZ', intensity: 'sehr stark', precipitation: 'ca. 20–50+ mm/h', description: 'Sehr starker Regen; häufig kräftige Schauer oder Gewitter, deutlich erhöhtes Starkregenpotenzial', label: '20–50+ mm/h · sehr stark' },
+    { color: '#8b008b', name: 'Lila', radar: 'ca. 50–55+ dBZ', intensity: 'extrem', precipitation: 'ca. 50–100+ mm/h', description: 'Sehr intensive Schauer/Gewitter; Starkregen und ggf. Hagel möglich', label: '50–100+ mm/h · extrem' },
+    { color: '#123b9b', name: 'Blau', radar: '> 55 dBZ', intensity: 'extrem', precipitation: '> 100 mm/h möglich', description: 'Extrem hohe Radarreflektivität; häufig Hinweis auf sehr starke Gewitter und insbesondere Hagel', label: '> 100 mm/h möglich · extrem' },
+] as const;

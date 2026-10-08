@@ -1,4 +1,5 @@
 import type { WeatherConfig, WeatherSource } from './schema';
+import { WEATHER_LEGEND_8 } from './palette';
 export const WEATHER_LEGEND = [
     { color: '#9bdcf7', label: '< 1 mm/h · sehr leicht' },
     { color: '#2f80ed', label: '1-3 mm/h · leicht/mäßig' },
@@ -25,10 +26,10 @@ export function publicWeather(config: WeatherConfig, origin: string) {
     const inputs = active(config);
     if (!config.weather.enabled || inputs.length === 0) return null;
     return {
-        url: `${origin}/api/v1/weather/tiles/{z}/{x}/{y}`,
+        url: `${origin}/api/v1/weather/geojson`,
         opacity: config.weather.opacity,
         attribution: [...new Set(inputs.map((x) => credit(x.source)))].join(', '),
-        legend: WEATHER_LEGEND,
+        legend: WEATHER_LEGEND_8,
     };
 }
 export function activeWeather(config: WeatherConfig) {

@@ -34,7 +34,7 @@ export default function WeatherLegend() {
         >
             <div style={{ fontWeight: 700, marginBottom: 5 }}>Regenintensität</div>
             {weather.legend.map((item) => (
-                <div key={item.color} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <div key={item.color} title={`${item.radar} · ${item.description}`} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span
                         style={{
                             width: 14,
@@ -43,7 +43,7 @@ export default function WeatherLegend() {
                             display: 'inline-block',
                         }}
                     />
-                    {item.label}
+                    <span><strong>{item.name}</strong> · {item.precipitation} · {item.intensity}</span>
                 </div>
             ))}
         </div>

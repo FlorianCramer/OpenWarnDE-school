@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { WeatherConfig, WeatherSource } from '@/lib/weather/schema';
+import { WEATHER_LEGEND_8 } from '@/lib/weather/palette';
 
 function slug(name: string) {
     return (
@@ -560,22 +561,44 @@ export default function WeatherAdminPanel() {
                             Intensitäts-Skala
                         </div>
                         <div className="flex h-3 w-full overflow-hidden rounded-full">
-                            <div className="flex-1 bg-sky-300" />
-                            <div className="flex-1 bg-blue-500" />
-                            <div className="flex-1 bg-blue-800" />
-                            <div className="flex-1 bg-yellow-400" />
-                            <div className="flex-1 bg-orange-500" />
-                            <div className="flex-1 bg-red-600" />
+                            {WEATHER_LEGEND_8.map((item) => (
+                                <div key={item.color} className="flex-1" style={{ backgroundColor: item.color }} />
+                            ))}
                         </div>
                         <div className="flex justify-between text-[10px] font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
                             <span>leicht</span>
-                            <span>mittel</span>
-                            <span>stark</span>
+                            <span>mäßig</span>
+                            <span>extrem</span>
                         </div>
                     </div>
 
+                    <div className="mt-5 overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
+                        <table className="w-full min-w-[760px] text-left text-xs">
+                            <thead className="bg-neutral-100 text-neutral-600 dark:bg-neutral-900 dark:text-neutral-400">
+                                <tr>
+                                    <th className="px-3 py-2 font-medium">Farbe</th>
+                                    <th className="px-3 py-2 font-medium">Radarwert</th>
+                                    <th className="px-3 py-2 font-medium">Intensität</th>
+                                    <th className="px-3 py-2 font-medium">Niederschlag</th>
+                                    <th className="px-3 py-2 font-medium">Beschreibung</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {WEATHER_LEGEND_8.map((item) => (
+                                    <tr key={item.color} className="border-t border-neutral-200 dark:border-neutral-800">
+                                        <td className="whitespace-nowrap px-3 py-2 font-medium"><span className="mr-2 inline-block h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />{item.name}</td>
+                                        <td className="whitespace-nowrap px-3 py-2">{item.radar}</td>
+                                        <td className="whitespace-nowrap px-3 py-2">{item.intensity}</td>
+                                        <td className="whitespace-nowrap px-3 py-2">{item.precipitation}</td>
+                                        <td className="px-3 py-2">{item.description}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+
                     <p className="mt-5 text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-                        Die Gewichte bestimmen den Quellenkonsens. Die Ausgabe nutzt Hellblau, Blau,
+                        Die Gewichte bestimmen den Quellenkonsens. Die Ausgabe verwendet die acht Klassen.
                         Dunkelblau, Gelb und Orange/Rot für steigende Regenintensität; die
                         Transparenz zeigt die Übereinstimmung der Quellen.
                     </p>
