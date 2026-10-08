@@ -2,10 +2,10 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { LayerProvider } from './LayerContext';
-import LayerSwitcher from './LayerSwitcher';
+import { WeatherProvider } from './WeatherContext';
+import WeatherLegend from './WeatherLegend';
 
-const MapView = dynamic(() => import('./MapView'), {
+const MapView = dynamic(() => import('./WeatherMapView'), {
     ssr: false,
     loading: () => (
         <div
@@ -26,11 +26,11 @@ const MapView = dynamic(() => import('./MapView'), {
 
 export default function MapWrapper() {
     return (
-        <LayerProvider>
+        <WeatherProvider>
             <div style={{ position: 'relative', height: '100%', width: '100%' }}>
                 <MapView />
-                <LayerSwitcher />
+                <WeatherLegend />
             </div>
-        </LayerProvider>
+        </WeatherProvider>
     );
 }

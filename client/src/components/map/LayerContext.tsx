@@ -1,38 +1,59 @@
-// components/map/LayerContext.tsx
 'use client';
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
-import { BASE_LAYERS, type BaseLayer, type BaseLayerId } from './layers';
-import { OVERLAYS, type Overlay, type OverlayId } from './overlays';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { apiOrigin, type ServerLayer } from './server-layers';
 
 interface LayerContextValue {
-    baseLayer: BaseLayer;
-    setBaseLayer: (id: BaseLayerId) => void;
-    overlays: Overlay[];
-    toggleOverlay: (id: OverlayId) => void;
-    isOverlayActive: (id: OverlayId) => boolean;
+    layers: ServerLayer[];
+    active: ServerLayer | null;
+    setActive: (id: string) => void;
+    loading: boolean;
+    error: string | null;
 }
 
 const LayerContext = createContext<LayerContextValue | null>(null);
 
 export function LayerProvider({ children }: { children: ReactNode }) {
-    const [baseId, setBaseId] = useState<BaseLayerId>('osm');
-    const [activeOverlayIds, setActiveOverlayIds] = useState<OverlayId[]>([]);
+    const [layers, setLayers] = useState<ServerLayer[]>([]);
+    const [activeId, setActiveId] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const value = useMemo<LayerContextValue>(() => {
-        const toggleOverlay = (id: OverlayId) =>
-            setActiveOverlayIds((prev) =>
-                prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
-            );
-
-        return {
-            baseLayer: BASE_LAYERS[baseId],
-            setBaseLayer: setBaseId,
-            overlays: activeOverlayIds.map((id) => OVERLAYS[id]),
-            toggleOverlay,
-            isOverlayActive: (id) => activeOverlayIds.includes(id),
+    useEffect(() => {
+        let cancelled = false;
+        fetch(`${apiOrigin()}/api/v1/layers`)
+            .then(async (response) => {
+                const body = await response.json();
+                if (!response.ok) throw new Error('Layer konnten nicht geladen werden');
+                return body as { layers: ServerLayer[] };
+            })
+            .then((body) => {
+                if (cancelled) return;
+                setLayers(body.layers);
+                setActiveId((current) => current ?? body.layers[0]?.id ?? null);
+            })
+            .catch(() => {
+                if (!cancelled)
+                    setError('Server nicht erreichbar. Layer können nicht geladen werden.');
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
+            });
+        return () => {
+            cancelled = true;
         };
-    }, [baseId, activeOverlayIds]);
+    }, []);
+
+    const value = useMemo<LayerContextValue>(
+        () => ({
+            layers,
+            active: layers.find((layer) => layer.id === activeId) ?? null,
+            setActive: setActiveId,
+            loading,
+            error,
+        }),
+        [layers, activeId, loading, error],
+    );
 
     return <LayerContext.Provider value={value}>{children}</LayerContext.Provider>;
 }

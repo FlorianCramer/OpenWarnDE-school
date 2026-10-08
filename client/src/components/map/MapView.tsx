@@ -24,7 +24,7 @@ function ResizeHandler() {
 }
 
 export default function MapView() {
-    const { baseLayer, overlays } = useLayers();
+    const { active } = useLayers();
 
     return (
         <MapContainer
@@ -34,26 +34,23 @@ export default function MapView() {
             maxZoom={18}
             style={{ height: '100%', width: '100%' }}
         >
-            {/* Basis-Layer – key erzwingt sauberes Neu-Rendern beim Wechsel */}
-            <TileLayer
-                key={baseLayer.id}
-                url={baseLayer.url}
-                attribution={baseLayer.attribution}
-                maxZoom={baseLayer.maxZoom ?? 19}
-            />
-
-            {/* Overlays – können mehrere gleichzeitig aktiv sein */}
-            {overlays.map((o) => (
+            {active ? (
                 <TileLayer
-                    key={o.id}
-                    url={o.url}
-                    attribution={o.attribution}
-                    opacity={o.opacity ?? 1}
-                    // Overlays über Basis-Layer legen
+                    key={`${active.id}-base`}
+                    url={active.basemap.url}
+                    attribution={active.basemap.attribution}
+                    maxZoom={active.basemap.maxZoom}
+                />
+            ) : null}
+            {active?.weather ? (
+                <TileLayer
+                    key={`${active.id}-weather`}
+                    url={active.weather.url}
+                    attribution={active.weather.attribution}
+                    opacity={active.weather.opacity}
                     zIndex={10}
                 />
-            ))}
-
+            ) : null}
             <ResizeHandler />
         </MapContainer>
     );

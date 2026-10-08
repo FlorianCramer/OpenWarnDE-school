@@ -1,12 +1,9 @@
-// components/map/LayerSwitcher.tsx
 'use client';
 
-import { BASE_LAYERS, type BaseLayerId } from './layers';
-import { OVERLAYS, type OverlayId } from './overlays';
 import { useLayers } from './LayerContext';
 
 export default function LayerSwitcher() {
-    const { baseLayer, setBaseLayer, toggleOverlay, isOverlayActive } = useLayers();
+    const { layers, active, setActive, loading, error } = useLayers();
 
     return (
         <div
@@ -14,7 +11,7 @@ export default function LayerSwitcher() {
                 position: 'absolute',
                 top: 16,
                 right: 16,
-                zIndex: 1000, // über Leaflet
+                zIndex: 1000,
                 background: 'white',
                 padding: 12,
                 borderRadius: 8,
@@ -23,28 +20,18 @@ export default function LayerSwitcher() {
                 minWidth: 200,
             }}
         >
-            <div style={{ fontWeight: 600, marginBottom: 6 }}>Basis-Karte</div>
-            {(Object.keys(BASE_LAYERS) as BaseLayerId[]).map((id) => (
-                <label key={id} style={{ display: 'block', cursor: 'pointer' }}>
+            <div style={{ fontWeight: 600, marginBottom: 6 }}>Karte</div>
+            {loading ? <div>Layer werden geladen…</div> : null}
+            {error ? <div>{error}</div> : null}
+            {layers.map((layer) => (
+                <label key={layer.id} style={{ display: 'block', cursor: 'pointer' }}>
                     <input
                         type="radio"
-                        name="base"
-                        checked={baseLayer.id === id}
-                        onChange={() => setBaseLayer(id)}
+                        name="map-layer"
+                        checked={active?.id === layer.id}
+                        onChange={() => setActive(layer.id)}
                     />{' '}
-                    {BASE_LAYERS[id].name}
-                </label>
-            ))}
-
-            <div style={{ fontWeight: 600, margin: '10px 0 6px' }}>Overlays</div>
-            {(Object.keys(OVERLAYS) as OverlayId[]).map((id) => (
-                <label key={id} style={{ display: 'block', cursor: 'pointer' }}>
-                    <input
-                        type="checkbox"
-                        checked={isOverlayActive(id)}
-                        onChange={() => toggleOverlay(id)}
-                    />{' '}
-                    {OVERLAYS[id].name}
+                    {layer.name}
                 </label>
             ))}
         </div>
