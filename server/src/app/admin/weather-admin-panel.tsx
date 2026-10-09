@@ -562,7 +562,11 @@ export default function WeatherAdminPanel() {
                         </div>
                         <div className="flex h-3 w-full overflow-hidden rounded-full">
                             {WEATHER_LEGEND_8.map((item) => (
-                                <div key={item.color} className="flex-1" style={{ backgroundColor: item.color }} />
+                                <div
+                                    key={item.color}
+                                    className="flex-1"
+                                    style={{ backgroundColor: item.color }}
+                                />
                             ))}
                         </div>
                         <div className="flex justify-between text-[10px] font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
@@ -585,11 +589,26 @@ export default function WeatherAdminPanel() {
                             </thead>
                             <tbody>
                                 {WEATHER_LEGEND_8.map((item) => (
-                                    <tr key={item.color} className="border-t border-neutral-200 dark:border-neutral-800">
-                                        <td className="whitespace-nowrap px-3 py-2 font-medium"><span className="mr-2 inline-block h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />{item.name}</td>
-                                        <td className="whitespace-nowrap px-3 py-2">{item.radar}</td>
-                                        <td className="whitespace-nowrap px-3 py-2">{item.intensity}</td>
-                                        <td className="whitespace-nowrap px-3 py-2">{item.precipitation}</td>
+                                    <tr
+                                        key={item.color}
+                                        className="border-t border-neutral-200 dark:border-neutral-800"
+                                    >
+                                        <td className="whitespace-nowrap px-3 py-2 font-medium">
+                                            <span
+                                                className="mr-2 inline-block h-3 w-3 rounded-full"
+                                                style={{ backgroundColor: item.color }}
+                                            />
+                                            {item.name}
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-2">
+                                            {item.radar}
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-2">
+                                            {item.intensity}
+                                        </td>
+                                        <td className="whitespace-nowrap px-3 py-2">
+                                            {item.precipitation}
+                                        </td>
                                         <td className="px-3 py-2">{item.description}</td>
                                     </tr>
                                 ))}
@@ -598,8 +617,8 @@ export default function WeatherAdminPanel() {
                     </div>
 
                     <p className="mt-5 text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-                        Die Gewichte bestimmen den Quellenkonsens. Die Ausgabe verwendet die acht Klassen.
-                        Dunkelblau, Gelb und Orange/Rot für steigende Regenintensität; die
+                        Die Gewichte bestimmen den Quellenkonsens. Die Ausgabe verwendet die acht
+                        Klassen. Dunkelblau, Gelb und Orange/Rot für steigende Regenintensität; die
                         Transparenz zeigt die Übereinstimmung der Quellen.
                     </p>
                 </section>

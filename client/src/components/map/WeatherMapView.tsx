@@ -1,10 +1,12 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
-import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useWeather } from './WeatherContext';
+import { apiOrigin } from './weather-overlay';
+
 const CENTER: [number, number] = [51.1657, 10.4515];
+
 function ResizeHandler() {
     const map = useMap();
     useEffect(() => {
@@ -18,55 +20,29 @@ function ResizeHandler() {
     }, [map]);
     return null;
 }
-type WeatherFeatureCollection = {
-    type: 'FeatureCollection';
-    features: GeoJSON.Feature<GeoJSON.Polygon, { color: string }>[];
-};
-function WeatherGeoJsonLayer({ url, opacity }: { url: string; opacity: number }) {
-    const map = useMap();
-    const layer = useRef<L.GeoJSON | null>(null);
-    useEffect(() => {
-        let disposed = false;
-        const controller = new AbortController();
-        const load = async () => {
-            const bounds = map.getBounds();
-            const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()].join(',');
-            const response = await fetch(`${url}?bbox=${encodeURIComponent(bbox)}&zoom=${map.getZoom()}`, { signal: controller.signal });
-            if (!response.ok) throw new Error('Wetterflächen konnten nicht geladen werden');
-            const data = (await response.json()) as WeatherFeatureCollection;
-            if (disposed) return;
-            layer.current?.removeFrom(map);
-            layer.current = L.geoJSON(data as GeoJSON.GeoJsonObject, {
-                style: (feature) => ({
-                    color: feature?.properties?.color ?? '#9bdcf7',
-                    fillColor: feature?.properties?.color ?? '#9bdcf7',
-                    fillOpacity: opacity,
-                    opacity: 1,
-                    weight: 0,
-                    smoothFactor: 1.5,
-                }),
-                interactive: false,
-                pane: 'overlayPane',
-            }).addTo(map);
-        };
-        const reload = () => void load().catch((error: unknown) => {
-            if (error instanceof DOMException && error.name === 'AbortError') return;
-            console.error(error);
-        });
-        map.on('moveend zoomend', reload);
-        reload();
-        return () => {
-            disposed = true;
-            controller.abort();
-            map.off('moveend zoomend', reload);
-            layer.current?.removeFrom(map);
-            layer.current = null;
-        };
-    }, [map, opacity, url]);
-    return null;
+
+function WeatherTileLayer({ url, opacity }: { url: string; opacity: number }) {
+    return (
+        <TileLayer
+            url={url}
+            opacity={Math.min(0.7, Math.max(0.45, opacity))}
+            zIndex={450}
+            attribution="&copy; OpenStreetMap contributors"
+            tileSize={256}
+            minZoom={5}
+            maxZoom={18}
+            maxNativeZoom={18}
+            noWrap
+            crossOrigin="anonymous"
+            detectRetina={false}
+        />
+    );
 }
+
 export default function WeatherMapView() {
     const { weather } = useWeather();
+    const tileUrl = weather?.tileUrl ?? `${apiOrigin()}/api/v1/weather?z={z}&x={x}&y={y}`;
+
     return (
         <MapContainer
             center={CENTER}
@@ -82,11 +58,7 @@ export default function WeatherMapView() {
                 maxZoom={19}
             />
             {weather ? (
-                <WeatherGeoJsonLayer
-                    key={weather.url}
-                    url={weather.url}
-                    opacity={weather.opacity}
-                />
+                <WeatherTileLayer key={weather.url} url={tileUrl} opacity={weather.opacity} />
             ) : null}
             <ResizeHandler />
         </MapContainer>
