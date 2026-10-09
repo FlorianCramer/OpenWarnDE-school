@@ -1,6 +1,6 @@
 # OpenWarnDE 2.0 – Zielarchitektur
 
-**Architekturvariante:** Modularer Monolith mit klaren Schnittstellen  
+**Architekturvariante:** Modularer Monolith mit klaren Schnittstellen
 
 ## 1. Architekturziele
 

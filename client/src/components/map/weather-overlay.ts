@@ -15,6 +15,4 @@ export interface WeatherOverlay {
     mode?: 'raster' | 'vector';
     detailLevels?: Array<{ id: string; minZoom: number; maxZoom: number }>;
 }
-export function apiOrigin() {
-    return process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:3001';
-}
+export { apiOrigin, apiUrl } from '@/lib/api';

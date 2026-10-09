@@ -34,7 +34,7 @@ export async function GET(request: Request) {
         const search = new URL(request.url).searchParams;
         const coordinates = tileCoordinates(search);
         if (coordinates) {
-            if ('error' in coordinates) return json({ error: coordinates.error }, 400);
+            if ('error' in coordinates) return json({ error: coordinates.error }, 400, request);
             const png = await composeWeatherTile(coordinates.z, coordinates.x, coordinates.y);
             return new Response(new Uint8Array(png), {
                 headers: {
@@ -44,8 +44,12 @@ export async function GET(request: Request) {
                 },
             });
         }
-        return json({ weather: publicWeather(getWeatherConfig(), new URL(request.url).origin) });
+        return json(
+            { weather: publicWeather(getWeatherConfig(), new URL(request.url).origin) },
+            200,
+            request,
+        );
     } catch (error) {
-        return errorResponse(error);
+        return errorResponse(error, request);
     }
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import AdminPanel from './weather-admin-panel';
+import AdminPanel from './admin/weather-admin-panel';
 
 export const metadata: Metadata = {
     title: 'Layer-Verwaltung',

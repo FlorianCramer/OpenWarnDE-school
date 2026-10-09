@@ -13,6 +13,4 @@ export interface ServerLayer {
     } | null;
 }
 
-export function apiOrigin() {
-    return process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:3001';
-}
+export { apiOrigin, apiUrl } from '@/lib/api';

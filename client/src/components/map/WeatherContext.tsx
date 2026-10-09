@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { apiOrigin, type WeatherOverlay } from './weather-overlay';
+import { apiUrl } from './weather-overlay';
+import type { WeatherOverlay } from './weather-overlay';
 
 const Context = createContext<{
     weather: WeatherOverlay | null;
@@ -13,7 +14,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
-        fetch(`${apiOrigin()}/api/v1/weather`)
+        fetch(apiUrl('/api/v1/weather'))
             .then(async (r) => {
                 const body = await r.json();
                 if (!r.ok) throw new Error('Wetterlayer konnte nicht geladen werden');

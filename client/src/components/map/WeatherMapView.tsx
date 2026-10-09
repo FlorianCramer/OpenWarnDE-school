@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useWeather } from './WeatherContext';
-import { apiOrigin } from './weather-overlay';
+import { apiUrl } from './weather-overlay';
 
 const CENTER: [number, number] = [51.1657, 10.4515];
 
@@ -41,7 +41,7 @@ function WeatherTileLayer({ url, opacity }: { url: string; opacity: number }) {
 
 export default function WeatherMapView() {
     const { weather } = useWeather();
-    const tileUrl = weather?.tileUrl ?? `${apiOrigin()}/api/v1/weather?z={z}&x={x}&y={y}`;
+    const tileUrl = weather?.tileUrl ?? apiUrl('/api/v1/weather?z={z}&x={x}&y={y}');
 
     return (
         <MapContainer

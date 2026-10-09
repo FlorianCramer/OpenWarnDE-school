@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { WeatherConfig, WeatherSource } from '@/lib/weather/schema';
-import { WEATHER_LEGEND_8 } from '@/lib/weather/palette';
+import type { WeatherConfig, WeatherSource } from '@/lib/weather-schema';
+import { WEATHER_LEGEND_8 } from '@/lib/weather-palette';
+import { apiUrl } from '@/lib/api';
 
 function slug(name: string) {
     return (
@@ -95,7 +96,7 @@ export default function WeatherAdminPanel() {
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
-        fetch('/api/admin/config')
+        fetch(apiUrl('/api/admin/config'))
             .then(async (r) => {
                 const body = await r.json();
                 if (!r.ok) throw new Error(body.error);
@@ -140,7 +141,7 @@ export default function WeatherAdminPanel() {
         setSaving(true);
         setStatus('');
         try {
-            const r = await fetch('/api/admin/config', {
+            const r = await fetch(apiUrl('/api/admin/config'), {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(config),

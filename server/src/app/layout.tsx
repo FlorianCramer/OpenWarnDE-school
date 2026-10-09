@@ -1,29 +1,8 @@
-import './globals.css';
-import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 
-export const metadata: Metadata = {
-    metadataBase: new URL('https://FlorianCramer.github.io/OpenWarnDE-school/'),
-    //manifest: 'manifest.webmanifest',
-    title: {
-        default: 'OpenWarnDE 2.0 - API Server',
-        template: 'API Server | %s',
-    },
-    description: 'OpenWarnDE 2.0 - API Server',
-    applicationName: 'OpenWarnDE 2.0 - API Server',
-    authors: [
-        {
-            name: 'Flo',
-            url: 'https://floriancramer.github.io/',
-        },
-    ],
-    creator: 'Flo',
-    publisher: 'Flo',
-    keywords: ['OpenWarnDE 2.0 - API Server'],
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="en" data-scribe-recorder-ready="true">
+        <html lang="de" suppressHydrationWarning>
             <body>{children}</body>
         </html>
     );

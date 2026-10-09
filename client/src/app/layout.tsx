@@ -2,7 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    metadataBase: new URL('https://FlorianCramer.github.io/OpenWarnDE-school/'),
+    metadataBase: new URL(process.env.NEXT_PUBLIC_CLIENT_URL ?? 'http://127.0.0.1:3000'),
     //manifest: 'manifest.webmanifest',
     title: {
         default: 'OpenWarnDE 2.0',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en" data-scribe-recorder-ready="true">
+        <html lang="de" suppressHydrationWarning>
             <body>{children}</body>
         </html>
     );

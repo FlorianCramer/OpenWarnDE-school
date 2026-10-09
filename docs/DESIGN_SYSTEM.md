@@ -29,7 +29,7 @@ Die primäre Designfarbe ist ein gut lesbarer Blauton. Hintergründe sind überw
 Die Basisfarben werden als semantische Tokens definiert. Im Client werden sie in `client/src/app/globals.css` geführt. Für die Admin-Oberfläche sind dieselben semantischen Werte zu übernehmen oder über eine gemeinsame Token-Quelle konsistent abzubilden.
 
 | Token                  | Zweck                                                         |
-|------------------------|---------------------------------------------------------------|
+| ---------------------- | ------------------------------------------------------------- |
 | `--background`         | Heller Seiten- und Panelhintergrund                           |
 | `--foreground`         | Primärtext mit ausreichendem Kontrast                         |
 | `--primary`            | Primäre Aktion, aktive Auswahl und Fokusakzent                |
@@ -83,7 +83,7 @@ Die Radarlegende ist eine fachliche Darstellung der Radarreflektivität und der 
 ### 4.1 Radarreflektivität und Beschreibung
 
 | Farbe           | Radarwert / ungefährer Bereich | Niederschlagsintensität | Beschreibung                                                                                     |
-|-----------------|-------------------------------:|-------------------------|--------------------------------------------------------------------------------------------------|
+| --------------- | -----------------------------: | ----------------------- | ------------------------------------------------------------------------------------------------ |
 | 🩵 **Hellblau** |                   ca. 1–15 dBZ | Sehr gering             | Kein oder nur geringer Niederschlag; häufig Sprühregen bzw. einzelne Tropfen                     |
 | 🟢 **Grün**     |                  ca. 15–25 dBZ | Leicht                  | Leichter Niederschlag, z. B. leichter Landregen                                                  |
 | 🟩 **Hellgrün** |                  ca. 25–30 dBZ | Leicht bis mäßig        | Leichter bis mäßiger Regen                                                                       |
@@ -96,7 +96,7 @@ Die Radarlegende ist eine fachliche Darstellung der Radarreflektivität und der 
 ### 4.2 Ungefähre Niederschlagsintensität
 
 | Farbe       | Ungefährer Niederschlag |
-|-------------|------------------------:|
+| ----------- | ----------------------: |
 | 🩵 Hellblau |              < 0,4 mm/h |
 | 🟢 Grün     |        ca. 0,4–1,5 mm/h |
 | 🟩 Hellgrün |          ca. 1,5–3 mm/h |

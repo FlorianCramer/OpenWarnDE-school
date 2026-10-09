@@ -1,7 +1,8 @@
 'use client';
 
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { apiOrigin, type ServerLayer } from './server-layers';
+import { apiUrl } from './server-layers';
+import type { ServerLayer } from './server-layers';
 
 interface LayerContextValue {
     layers: ServerLayer[];
@@ -21,7 +22,7 @@ export function LayerProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         let cancelled = false;
-        fetch(`${apiOrigin()}/api/v1/layers`)
+        fetch(apiUrl('/api/v1/layers'))
             .then(async (response) => {
                 const body = await response.json();
                 if (!response.ok) throw new Error('Layer konnten nicht geladen werden');
