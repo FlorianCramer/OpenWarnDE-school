@@ -51,6 +51,7 @@ Der aktuelle Code kann von diesem Zielbild abweichen. Abweichungen zunächst pr�
 10. MapLibre als Zieltechnologie beachten; vorhandene Leaflet-Implementierungen nur nach bewusster Migrationsentscheidung ersetzen.
 11. Bestehende Komponenten wiederverwenden, wenn sie die Soll-Anforderungen erfüllen; unnötige Bibliotheken und großflächige Umbauten vermeiden.
 12. Änderungen an API-Verträgen, Datenmodellen, Design-Tokens oder Architektur in den passenden Dokumenten nachführen.
+13. Dateien welche nach einen umbau nicht mehr verwendet werden weil sie erstetzt wurden, sollen gelöscht werden.
 
 ## Sicherheitsregeln
 
@@ -68,7 +69,6 @@ Nach Codeänderungen von der Repository-Wurzel aus möglichst ausführen:
 npm run typecheck
 npm run lint
 npm run build
-npm run format:check
 ```
 
 Bei Karten-, Standort-, Suche-, Warnungs- oder Push-Änderungen zusätzlich einen manuellen End-to-End-Test des betroffenen Ablaufs durchführen und das Ergebnis dokumentieren. Bei reinen Dokumentationsänderungen Pfade, Markdown-Struktur und Referenzen prüfen.
@@ -86,3 +86,5 @@ Wenn eine konkrete Entscheidung fehlt, die Architektur oder Umfang wesentlich ve
 ## Darf nie getan werden
 
 1. _schools darf nie bearbeitet werden von AI
+2. npm run format; npm run format:check
+3. Nicht genutze Dateien existieren noch und sind nicht gelöscht.

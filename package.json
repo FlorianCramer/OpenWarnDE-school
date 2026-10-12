@@ -21,7 +21,7 @@
         "url": "https://github.com/FlorianCramer/OpenWarnDE-school/issues"
     },
     "scripts": {
-        "dev": "concurrently \"npm run dev:srv\" \"npm run dev:app\" \"npm run dev:admin\"",
+        "dev": "concurrently \"npm run dev:admin\" \"npm run dev:srv\" \"npm run dev:app\"",
         "dev:srv": "npm run dev --prefix server",
         "dev:app": "npm run dev --prefix client",
         "dev:admin": "npm run dev --prefix admin",

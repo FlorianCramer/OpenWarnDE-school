@@ -150,6 +150,16 @@ Der aktuelle Repository-Code kann von diesen Zielentscheidungen abweichen. Insbe
 
 ## 7. Schnittstellen
 
+### Radar-Tile-API v1
+
+Der Radar-Datenfluss wird über eine getrennte, cachefähige Tile-Schnittstelle angeboten. Die bisherige Route `GET /api/v1/weather` bleibt als kompatible Wetter-/Konfigurationsschnittstelle erhalten.
+
+- `GET /api/v1/weather/radar/metadata` liefert Produktstatus, Produktzeitpunkt, Aktualisierungszeitpunkt, Tile-Größe, Zoomgrenzen und die Tile-URL. Bei fehlendem Radarprodukt antwortet die Route mit `503` und `status: unavailable`.
+- `GET /api/v1/weather/radar/tiles/{z}/{x}/{y}.png` validiert XYZ-Koordinaten für Zoom 4 bis 22 und liefert PNG-Rasterdaten. Ungültige Koordinaten ergeben `400`, fehlende/veraltete Quelldaten `503`; stabile Kachelbytes werden über `ETag` und `304 Not Modified` wiederverwendet.
+- Die Verarbeitung verwendet den bestehenden serverseitigen Quellenadapter und `composeWeatherTile`. Der Ergebnis-Cache ist derzeit pro Node-Prozess und Konfigurationsversion; eine persistente, instanzübergreifende Tile-Ablage bleibt ein späterer Betriebsschritt.
+- Die konfigurierten Quellen liefern keine verlässliche gemeinsame Produktabdeckung, daher ist `bounds` aktuell `null` statt einer erfundenen geografischen Grenze.
+- Die Clientkarte verwendet MapLibre GL JS. Die Kartenansicht setzt keine anwendungsspezifische `minZoom`- oder `maxZoom`-Begrenzung; die Rasterquelle unterstützt Radar bis Zoom 22 und MapLibre kann darüber hinaus überzoomen.
+
 ### Technisch
 
 - Client ↔ OpenWarnDE API

@@ -20,8 +20,7 @@ export function publicWeather(config: WeatherConfig, origin: string) {
     const inputs = activeWeather(config);
     if (inputs.length === 0) return null;
     return {
-        url: `${origin}/api/v1/weather/geojson`,
-        tileUrl: `${origin}/api/v1/weather?z={z}&x={x}&y={y}`,
+        tileUrl: `${origin}/api/v1/weather/radar/tiles/{z}/{x}/{y}.png`,
         opacity: config.weather.opacity,
         attribution: [...new Set(inputs.map((x) => credit(x.source)))].join(', '),
         legend: WEATHER_LEGEND_8,

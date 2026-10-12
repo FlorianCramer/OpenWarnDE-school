@@ -1,6 +1,6 @@
 import { PNG } from 'pngjs';
 import { getWeatherConfig, getWeatherConfigVersion } from './store';
-import { fetchSourcePng } from './sources';
+import { fetchSourcePng, getRadarCacheVersion } from './sources';
 import { normalizeWeatherPixel } from './normalize';
 import type { WeatherConfig, WeatherSource } from './schema';
 
@@ -162,7 +162,7 @@ export async function composeWeatherTile(z: number, x: number, y: number): Promi
     const inputs = activeWeather(config);
     if (!inputs.length) return emptyTile();
 
-    const key = `${getWeatherConfigVersion()}:${z}:${x}:${y}`;
+    const key = `${getWeatherConfigVersion()}:${getRadarCacheVersion()}:${z}:${x}:${y}`;
     const hit = cache.get(key);
     if (hit) return hit;
 

@@ -1,66 +1,100 @@
 'use client';
-import { useEffect } from 'react';
-import { MapContainer, TileLayer, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+
+import { useEffect, useRef } from 'react';
+import * as maplibregl from 'maplibre-gl';
+import type { Map as MapLibreMap } from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import { useWeather } from './WeatherContext';
-import { apiUrl } from './weather-overlay';
+import type { RadarMetadata } from './weather-overlay';
 
-const CENTER: [number, number] = [51.1657, 10.4515];
+const CENTER: [number, number] = [10.4515, 51.1657];
+const BASE_SOURCE = 'openstreetmap-base-source';
+const BASE_LAYER = 'openstreetmap-base-layer';
+const RADAR_SOURCE = 'weather-radar-source';
+const RADAR_LAYER = 'weather-radar-layer';
+const MAPLIBRE_WORKER_URL = '/maplibre-gl-worker.mjs?v=6.12.0';
 
-function ResizeHandler() {
-    const map = useMap();
-    useEffect(() => {
-        const resize = () => map.invalidateSize();
-        window.addEventListener('resize', resize);
-        const timer = setTimeout(resize, 100);
-        return () => {
-            window.removeEventListener('resize', resize);
-            clearTimeout(timer);
-        };
-    }, [map]);
-    return null;
+function radarOpacity(opacity: number) {
+    return Math.min(0.7, Math.max(0.45, opacity));
 }
 
-function WeatherTileLayer({ url, opacity }: { url: string; opacity: number }) {
-    return (
-        <TileLayer
-            url={url}
-            opacity={Math.min(0.7, Math.max(0.45, opacity))}
-            zIndex={450}
-            attribution="&copy; OpenStreetMap contributors"
-            tileSize={256}
-            minZoom={5}
-            maxZoom={18}
-            maxNativeZoom={18}
-            noWrap
-            crossOrigin="anonymous"
-            detectRetina={false}
-        />
-    );
+function addRadarLayer(map: MapLibreMap, radar: RadarMetadata | null) {
+    if (!radar || map.getSource(RADAR_SOURCE)) return;
+    map.addSource(RADAR_SOURCE, {
+        type: 'raster',
+        tiles: [radar.tileUrl],
+        tileSize: radar.tileSize,
+        minzoom: radar.minZoom,
+        maxzoom: radar.maxZoom,
+    });
+    map.addLayer({
+        id: RADAR_LAYER,
+        type: 'raster',
+        source: RADAR_SOURCE,
+        paint: { 'raster-opacity': 0 },
+    });
+}
+
+function updateRadarOpacity(map: MapLibreMap, opacity: number) {
+    if (map.getLayer(RADAR_LAYER)) {
+        map.setPaintProperty(RADAR_LAYER, 'raster-opacity', radarOpacity(opacity));
+    }
 }
 
 export default function WeatherMapView() {
     const { weather } = useWeather();
-    const tileUrl = weather?.tileUrl ?? apiUrl('/api/v1/weather?z={z}&x={x}&y={y}');
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const mapRef = useRef<MapLibreMap | null>(null);
+    const radar = weather?.radar ?? null;
+    const radarRef = useRef<RadarMetadata | null>(radar);
+    const radarOpacityRef = useRef(0);
 
-    return (
-        <MapContainer
-            center={CENTER}
-            zoom={6}
-            minZoom={5}
-            maxZoom={18}
-            preferCanvas
-            style={{ height: '100%', width: '100%' }}
-        >
-            <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution="&copy; OpenStreetMap contributors"
-                maxZoom={19}
-            />
-            {weather ? (
-                <WeatherTileLayer key={weather.url} url={tileUrl} opacity={weather.opacity} />
-            ) : null}
-            <ResizeHandler />
-        </MapContainer>
-    );
+    useEffect(() => {
+        if (!containerRef.current || mapRef.current) return;
+        maplibregl.setWorkerUrl(MAPLIBRE_WORKER_URL);
+        const map = new maplibregl.Map({
+            container: containerRef.current,
+            center: CENTER,
+            zoom: 6,
+            style: {
+                version: 8,
+                sources: {
+                    [BASE_SOURCE]: {
+                        type: 'raster',
+                        tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+                        tileSize: 256,
+                        maxzoom: 19,
+                    },
+                },
+                layers: [
+                    {
+                        id: BASE_LAYER,
+                        type: 'raster',
+                        source: BASE_SOURCE,
+                    },
+                ],
+            },
+        });
+        map.addControl(new maplibregl.NavigationControl(), 'top-right');
+        mapRef.current = map;
+        map.on('load', () => {
+            addRadarLayer(map, radarRef.current);
+            updateRadarOpacity(map, radarOpacityRef.current);
+        });
+        return () => {
+            map.remove();
+            mapRef.current = null;
+        };
+    }, []);
+
+    useEffect(() => {
+        radarRef.current = radar;
+        radarOpacityRef.current = weather?.opacity ?? 0;
+        const map = mapRef.current;
+        if (!map || !map.isStyleLoaded() || !radar) return;
+        addRadarLayer(map, radar);
+        updateRadarOpacity(map, weather?.opacity ?? 0);
+    }, [radar, weather?.opacity]);
+
+    return <div ref={containerRef} style={{ height: '100%', width: '100%' }} />;
 }

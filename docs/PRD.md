@@ -117,14 +117,15 @@ Entwickler benötigen eine verständliche Modulstruktur, versionierte Schnittste
 
 Die konkrete Umsetzung kann angepasst werden, soll aber mindestens folgende fachliche Schnittstellen vorsehen. Während der lokalen Entwicklung werden sie vom API-Server auf Port `8080` bereitgestellt:
 
-| Route                                      | Zweck                                                |
-| ------------------------------------------ | ---------------------------------------------------- |
-| `GET /api/v1/layers`                       | Verfügbare Karten-, Wetter- und Warnlayer liefern.   |
-| `GET /api/v1/warnings`                     | Öffentliche, aktive Warnungen liefern.               |
-| `POST /api/v1/admin/warnings`              | Warnung nach Berechtigungsprüfung erstellen.         |
-| `POST /api/v1/admin/warnings/{id}/publish` | Warnung veröffentlichen und optional Push auslösen.  |
-| `GET /api/v1/location/search`              | Kartensuche an einen geeigneten Suchdienst anbinden. |
-| `GET /api/v1/weather/...`                  | Wetterdaten und Wetterkacheln bereitstellen.         |
+| Route                                             | Zweck                                                       |
+| ------------------------------------------------- | ----------------------------------------------------------- |
+| `GET /api/v1/warnings`                            | Öffentliche, aktive Warnungen liefern.                      |
+| `POST /api/v1/admin/warnings`                     | Warnung nach Berechtigungsprüfung erstellen.                |
+| `POST /api/v1/admin/warnings/{id}/publish`        | Warnung veröffentlichen und optional Push auslösen.         |
+| `GET /api/v1/location/search`                     | Kartensuche an einen geeigneten Suchdienst anbinden.        |
+| `GET /api/v1/weather/...`                         | Wetterdaten und Wetterkacheln bereitstellen.                |
+| `GET /api/v1/weather/radar/metadata`              | Status und Metadaten des aktuellen Radarprodukts liefern.   |
+| `GET /api/v1/weather/radar/tiles/{z}/{x}/{y}.png` | Eine validierte PNG-Rasterkachel des Radarprodukts liefern. |
 
 Interne Admin-Routen dürfen nicht allein durch die Client-Oberfläche geschützt werden. Jede schreibende Aktion benötigt serverseitige Authentifizierung und Autorisierung.
 

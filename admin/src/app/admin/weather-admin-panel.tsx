@@ -578,7 +578,7 @@ export default function WeatherAdminPanel() {
                     </div>
 
                     <div className="mt-5 overflow-x-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
-                        <table className="w-full min-w-[760px] text-left text-xs">
+                        <table className="w-full min-w-190 text-left text-xs">
                             <thead className="bg-neutral-100 text-neutral-600 dark:bg-neutral-900 dark:text-neutral-400">
                                 <tr>
                                     <th className="px-3 py-2 font-medium">Farbe</th>

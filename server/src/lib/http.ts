@@ -19,14 +19,20 @@ function allowedOrigin(request?: Request) {
         : (configured[0] ?? defaultOrigins[0]);
 }
 
+export function corsHeaders(request?: Request) {
+    return {
+        'Access-Control-Allow-Origin': allowedOrigin(request),
+        'Access-Control-Allow-Methods': 'GET,PUT,OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        Vary: 'Origin',
+    };
+}
+
 export function json(body: unknown, status = 200, request?: Request) {
     return NextResponse.json(body, {
         status,
         headers: {
-            'Access-Control-Allow-Origin': allowedOrigin(request),
-            'Access-Control-Allow-Methods': 'GET,PUT,OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            Vary: 'Origin',
+            ...corsHeaders(request),
             'Cache-Control': 'no-store',
         },
     });
