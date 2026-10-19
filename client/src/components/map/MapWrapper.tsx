@@ -3,7 +3,9 @@
 
 import dynamic from 'next/dynamic';
 import { WeatherProvider } from './WeatherContext';
+import { LocationProvider } from './LocationContext';
 import WeatherLegend from './WeatherLegend';
+import LocationButton from './LocationButton';
 
 const MapView = dynamic(() => import('./WeatherMapView'), {
     ssr: false,
@@ -12,12 +14,15 @@ const MapView = dynamic(() => import('./WeatherMapView'), {
 
 export default function MapWrapper() {
     return (
-        <WeatherProvider>
-            <div className="relative h-full w-full">
-                <MapView />
-                <WeatherLegend />
-            </div>
-        </WeatherProvider>
+        <LocationProvider>
+            <WeatherProvider>
+                <div className="relative h-full w-full">
+                    <MapView />
+                    <WeatherLegend />
+                    <LocationButton />
+                </div>
+            </WeatherProvider>
+        </LocationProvider>
     );
 }
 

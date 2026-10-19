@@ -5,6 +5,8 @@ import * as maplibregl from 'maplibre-gl';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useWeather } from './WeatherContext';
+import { useLocation } from './LocationContext';
+import { UserLocationMarkerManager } from './user-location-marker';
 import type { RadarMetadata } from './weather-overlay';
 
 const CENTER: [number, number] = [10.4515, 51.1657];
@@ -43,14 +45,21 @@ function updateRadarOpacity(map: MapLibreMap, opacity: number) {
 
 export default function WeatherMapView() {
     const { weather } = useWeather();
+    const { location, centerTrigger } = useLocation();
     const containerRef = useRef<HTMLDivElement | null>(null);
     const mapRef = useRef<MapLibreMap | null>(null);
     const radar = weather?.radar ?? null;
     const radarRef = useRef<RadarMetadata | null>(radar);
     const radarOpacityRef = useRef(0);
 
+    const locationRef = useRef(location);
+    const lastCenterTriggerRef = useRef(centerTrigger);
+    const markerManagerRef = useRef<UserLocationMarkerManager | null>(null);
+
     useEffect(() => {
         if (!containerRef.current || mapRef.current) return;
+        const markerManager = new UserLocationMarkerManager();
+        markerManagerRef.current = markerManager;
         maplibregl.setWorkerUrl(MAPLIBRE_WORKER_URL);
         const map = new maplibregl.Map({
             container: containerRef.current,
@@ -77,11 +86,17 @@ export default function WeatherMapView() {
         });
         map.addControl(new maplibregl.NavigationControl(), 'top-right');
         mapRef.current = map;
+
         map.on('load', () => {
             addRadarLayer(map, radarRef.current);
             updateRadarOpacity(map, radarOpacityRef.current);
+            if (locationRef.current) {
+                markerManagerRef.current?.update(map, locationRef.current);
+            }
         });
+
         return () => {
+            markerManagerRef.current?.destroy(map);
             map.remove();
             mapRef.current = null;
         };
@@ -95,6 +110,25 @@ export default function WeatherMapView() {
         addRadarLayer(map, radar);
         updateRadarOpacity(map, weather?.opacity ?? 0);
     }, [radar, weather?.opacity]);
+
+    useEffect(() => {
+        locationRef.current = location;
+        const map = mapRef.current;
+        if (!map || !map.isStyleLoaded()) return;
+
+        if (location) {
+            markerManagerRef.current?.update(map, location);
+
+            if (centerTrigger > 0 && centerTrigger !== lastCenterTriggerRef.current) {
+                lastCenterTriggerRef.current = centerTrigger;
+                map.flyTo({
+                    center: [location.longitude, location.latitude],
+                    zoom: 14,
+                    essential: true,
+                });
+            }
+        }
+    }, [location, centerTrigger]);
 
     return <div ref={containerRef} style={{ height: '100%', width: '100%' }} />;
 }
