@@ -6,7 +6,7 @@ out
 
 # env
 .env
-client/.env.local
+.env.local
 
 # Layer-Konfiguration kann API-Keys enthalten
 server/data/layers.json

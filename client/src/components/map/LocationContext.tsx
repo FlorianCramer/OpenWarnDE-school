@@ -1,17 +1,7 @@
 'use client';
 
-import {
-    createContext,
-    useCallback,
-    useContext,
-    useMemo,
-    useState,
-    type ReactNode,
-} from 'react';
-import {
-    getCurrentUserLocation,
-    type UserCoordinates,
-} from '@/lib/geolocation';
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
+import { getCurrentUserLocation, type UserCoordinates } from '@/lib/geolocation';
 
 export type LocationStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -44,9 +34,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
             setCenterTrigger((prev) => prev + 1);
         } catch (err: unknown) {
             const message =
-                err instanceof Error
-                    ? err.message
-                    : 'Der Standort konnte nicht ermittelt werden.';
+                err instanceof Error ? err.message : 'Der Standort konnte nicht ermittelt werden.';
             setError(message);
             setStatus('error');
         }
@@ -102,14 +90,10 @@ export function LocationProvider({ children }: { children: ReactNode }) {
             recenterLocation,
             clearError,
             setDemoLocation,
-        ]
+        ],
     );
 
-    return (
-        <LocationContext.Provider value={value}>
-            {children}
-        </LocationContext.Provider>
-    );
+    return <LocationContext.Provider value={value}>{children}</LocationContext.Provider>;
 }
 
 export function useLocation() {
@@ -119,4 +103,3 @@ export function useLocation() {
     }
     return ctx;
 }
-

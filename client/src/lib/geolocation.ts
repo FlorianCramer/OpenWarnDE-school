@@ -15,7 +15,7 @@ export class GeolocationError extends Error {
     constructor(
         message: string,
         public readonly code: 'PERMISSION_DENIED' | 'TIMEOUT' | 'POSITION_UNAVAILABLE' | 'UNKNOWN',
-        public readonly rawDetails?: string
+        public readonly rawDetails?: string,
     ) {
         super(message);
         this.name = 'GeolocationError';
@@ -89,18 +89,15 @@ export async function getCurrentUserLocation(): Promise<UserCoordinates> {
                 if (requested.location === 'denied') {
                     throw new GeolocationError(
                         'Standortzugriff wurde verweigert. Bitte erlaube den Standort in den Systemeinstellungen der App.',
-                        'PERMISSION_DENIED'
+                        'PERMISSION_DENIED',
                     );
                 }
-            } else if (
-                check.location === 'prompt' ||
-                check.location === 'prompt-with-rationale'
-            ) {
+            } else if (check.location === 'prompt' || check.location === 'prompt-with-rationale') {
                 const requested = await Geolocation.requestPermissions();
                 if (requested.location === 'denied') {
                     throw new GeolocationError(
                         'Standortzugriff wurde verweigert.',
-                        'PERMISSION_DENIED'
+                        'PERMISSION_DENIED',
                     );
                 }
             }
@@ -131,7 +128,7 @@ export async function getCurrentUserLocation(): Promise<UserCoordinates> {
             throw new GeolocationError(
                 'Standortzugriff wurde verweigert. Bitte prüfe die Browser-Berechtigung für localhost:3000 und stelle unter Windows sicher, dass unter „Einstellungen > Datenschutz & Sicherheit > Standort“ die Standortdienste und der Zugriff für Desktop-Apps aktiviert sind.',
                 'PERMISSION_DENIED',
-                message
+                message,
             );
         }
 
@@ -139,7 +136,7 @@ export async function getCurrentUserLocation(): Promise<UserCoordinates> {
             throw new GeolocationError(
                 'Die Standortermittlung hat das Zeitlimit überschritten. Bitte prüfe deine Netzwerkverbindung und versuche es erneut.',
                 'TIMEOUT',
-                message
+                message,
             );
         }
 
@@ -153,14 +150,14 @@ export async function getCurrentUserLocation(): Promise<UserCoordinates> {
             throw new GeolocationError(
                 'Der Standort konnte vom System nicht ermittelt werden (Position unavailable). Unter Windows: Bitte prüfe in den Windows-Einstellungen unter „Datenschutz & Sicherheit > Standort“, ob die Standortdienste sowie „Zulassen, dass Desktop-Apps auf Ihren Standort zugreifen“ aktiviert sind.',
                 'POSITION_UNAVAILABLE',
-                message
+                message,
             );
         }
 
         throw new GeolocationError(
             `Standortermittlung fehlgeschlagen (${message || 'Position nicht verfügbar'}). Bitte prüfe die Geräteeinstellungen.`,
             'UNKNOWN',
-            message
+            message,
         );
     }
 }

@@ -42,7 +42,8 @@
         "lint:app": "npm run lint --prefix client",
         "lint:admin": "npm run lint --prefix admin",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "check": "npm run typecheck && npm run lint && npm run format:check"
     },
     "devDependencies": {
         "concurrently": "^10.0.5",

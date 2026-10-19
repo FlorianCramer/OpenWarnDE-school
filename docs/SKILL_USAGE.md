@@ -4,15 +4,15 @@
 
 Start your coding agent in (or pointed at) the codebase you want to audit, then ask it to do a security audit:
 
-```
+```text
 security audit this codebase
 ```
 
-```
+```text
 find security vulnerabilities in ./src
 ```
 
-```
+```text
 do a security review, output to ~/audits/my-project
 ```
 

@@ -10,7 +10,7 @@ const USER_ACCURACY_LINE = 'user-location-accuracy-line';
 function createGeoJsonCircle(
     center: [number, number],
     radiusInMeters: number,
-    points = 64
+    points = 64,
 ): GeoJSON.Feature<GeoJSON.Polygon> {
     const coords: [number, number][] = [];
     const km = radiusInMeters / 1000;
@@ -58,7 +58,7 @@ export class UserLocationMarkerManager {
             const accuracyText =
                 location.accuracy && location.accuracy > 0
                     ? `<div style="font-size: 11px; color: #555; margin-top: 2px;">Genauigkeit: ±${Math.round(
-                          location.accuracy
+                          location.accuracy,
                       )} m</div>`
                     : '';
 
@@ -86,7 +86,7 @@ export class UserLocationMarkerManager {
             const accuracyText =
                 location.accuracy && location.accuracy > 0
                     ? `<div style="font-size: 11px; color: #555; margin-top: 2px;">Genauigkeit: ±${Math.round(
-                          location.accuracy
+                          location.accuracy,
                       )} m</div>`
                     : '';
             const popup = this.marker.getPopup();
@@ -160,4 +160,3 @@ export class UserLocationMarkerManager {
         }
     }
 }
-

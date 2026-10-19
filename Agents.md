@@ -63,12 +63,10 @@ Der aktuelle Code kann von diesem Zielbild abweichen. Abweichungen zunächst pr�
 
 ## Verifikation
 
-Nach Codeänderungen von der Repository-Wurzel aus möglichst ausführen:
+Nach Codeänderungen von der Repository-Root aus möglichst ausführen:
 
 ```bash
-npm run typecheck
-npm run lint
-npm run build
+npm run check
 ```
 
 Bei Karten-, Standort-, Suche-, Warnungs- oder Push-Änderungen zusätzlich einen manuellen End-to-End-Test des betroffenen Ablaufs durchführen und das Ergebnis dokumentieren. Bei reinen Dokumentationsänderungen Pfade, Markdown-Struktur und Referenzen prüfen.
@@ -86,5 +84,5 @@ Wenn eine konkrete Entscheidung fehlt, die Architektur oder Umfang wesentlich ve
 ## Darf nie getan werden
 
 1. _schools darf nie bearbeitet werden von AI
-2. npm run format; npm run format:check
+2. npm run format
 3. Nicht genutze Dateien existieren noch und sind nicht gelöscht.

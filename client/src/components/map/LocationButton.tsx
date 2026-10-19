@@ -103,10 +103,7 @@ export default function LocationButton() {
                     </>
                 ) : status === 'success' ? (
                     <>
-                        <LocateFixed
-                            className="h-5 w-5 text-[#006DAA]"
-                            aria-hidden="true"
-                        />
+                        <LocateFixed className="h-5 w-5 text-[#006DAA]" aria-hidden="true" />
                         <span className="hidden sm:inline">Standort zentrieren</span>
                         <span
                             className="h-2 w-2 rounded-full bg-[#006DAA]"
@@ -124,4 +121,3 @@ export default function LocationButton() {
         </div>
     );
 }
-

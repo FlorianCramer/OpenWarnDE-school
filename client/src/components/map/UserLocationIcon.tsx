@@ -120,4 +120,3 @@ export function UserLocationIcon({ className }: { className?: string }) {
         </svg>
     );
 }
-

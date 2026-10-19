@@ -39,12 +39,8 @@ function MapLoadingScreen() {
             />
 
             <div className="text-center">
-                <p className="text-sm font-medium text-foreground">
-                    Karte wird geladen…
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                    Wetterdaten werden abgerufen
-                </p>
+                <p className="text-sm font-medium text-foreground">Karte wird geladen…</p>
+                <p className="mt-1 text-xs text-muted-foreground">Wetterdaten werden abgerufen</p>
             </div>
         </div>
     );
