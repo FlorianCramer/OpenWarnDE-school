@@ -7,21 +7,21 @@ export default function AdminPage() {
             header: true,
             headline: 'Aktive Warnungen',
             contenttype: 'number',
-            content: '0'
+            content: '0',
         },
         {
             header: true,
             headline: 'Karten-Layer',
             contenttype: 'number',
-            content: '2'
+            content: '2',
         },
         {
             header: true,
             headline: 'Status',
             contenttype: 'status',
             statustype: 'success',
-            content: 'very good'
-        }
+            content: 'very good',
+        },
     ];
 
     return (
@@ -31,14 +31,11 @@ export default function AdminPage() {
             </p>
 
             <Header
-                headline='Übersicht'
-                subline='Verwalte Warnmeldungen und Karten-Layer zentral über das OpenWarnDE 2.0 Backend.'
+                headline="Übersicht"
+                subline="Verwalte Warnmeldungen und Karten-Layer zentral über das OpenWarnDE 2.0 Backend."
             />
 
-            <CardRow
-                height={8}
-                cards={row1}
-            />
+            <CardRow height={8} cards={row1} />
         </div>
     );
 }

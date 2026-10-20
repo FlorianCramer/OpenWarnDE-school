@@ -1,6 +1,6 @@
 export type HeaderProps = {
     headline: string;
-    subline:  string;
+    subline: string;
 };
 
 export function Header({ headline, subline }: HeaderProps) {
@@ -10,9 +10,7 @@ export function Header({ headline, subline }: HeaderProps) {
                 {headline}
             </h1>
 
-            <p className="mt-2 text-sm text-[var(--muted-foreground)]">
-                {subline}
-            </p>
+            <p className="mt-2 text-sm text-[var(--muted-foreground)]">{subline}</p>
         </>
     );
 }

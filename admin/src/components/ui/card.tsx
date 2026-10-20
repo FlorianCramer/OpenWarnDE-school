@@ -14,9 +14,9 @@ type BaseCard = {
 export type CardContent =
     | (BaseCard & { contenttype: 'number'; content: string }) // z. B. '0'
     | (BaseCard & { contenttype: 'string'; content: string }) // z. B. 'Hallo'
-    | (BaseCard & { contenttype: 'time';   content: string }) // z. B. '14:32 Uhr'
-    | (BaseCard & { contenttype: 'date';   content: string }) // z. B. '26.10.2026'
-    | (BaseCard & { contenttype: 'html';   content: string }) // `<p>Inhalt</p>`
+    | (BaseCard & { contenttype: 'time'; content: string }) // z. B. '14:32 Uhr'
+    | (BaseCard & { contenttype: 'date'; content: string }) // z. B. '26.10.2026'
+    | (BaseCard & { contenttype: 'html'; content: string }) // `<p>Inhalt</p>`
     | (BaseCard & { contenttype: 'status'; content: string; statustype: StatusType });
 
 export type CardProps = CardContent;
@@ -201,7 +201,9 @@ export function Card(props: CardProps) {
                                     />
                                 </span>
                             ) : (
-                                <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${current.dotBg}`} />
+                                <span
+                                    className={`h-2.5 w-2.5 shrink-0 rounded-full ${current.dotBg}`}
+                                />
                             )}
                             {current.icon}
                             <span>{content || current.defaultLabel}</span>
@@ -215,7 +217,6 @@ export function Card(props: CardProps) {
                 return (
                     <div
                         className="text-sm text-[var(--foreground)]"
-                        // eslint-disable-next-line react/no-danger
                         dangerouslySetInnerHTML={{ __html: content }}
                     />
                 );
@@ -237,15 +238,16 @@ export function Card(props: CardProps) {
                         )}
                     </div>
                     {icon && (
-                        <span className="shrink-0 text-[var(--muted-foreground)]" aria-hidden="true">
+                        <span
+                            className="shrink-0 text-[var(--muted-foreground)]"
+                            aria-hidden="true"
+                        >
                             {icon}
                         </span>
                     )}
                 </div>
             )}
-            <div className={showHeader ? 'mt-auto pt-2' : ''}>
-                {renderContent()}
-            </div>
+            <div className={showHeader ? 'mt-auto pt-2' : ''}>{renderContent()}</div>
         </div>
     );
 }
@@ -265,8 +267,8 @@ export function CardRow({ cards, height }: CardRowProps) {
         cards.length === 1
             ? 'grid-cols-1'
             : cards.length === 2
-                ? 'grid-cols-1 sm:grid-cols-2'
-                : 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3';
+              ? 'grid-cols-1 sm:grid-cols-2'
+              : 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3';
 
     const baseHeight = '10rem';
     const gap = '1.25rem';
