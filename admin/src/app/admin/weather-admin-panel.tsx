@@ -34,19 +34,19 @@ function newSource(ids: string[]): WeatherSource {
 /* ---------- UI-Bausteine ---------- */
 
 const inputClass =
-    'w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm transition-colors placeholder:text-neutral-400 focus:border-neutral-900 focus:outline-none focus:ring-2 focus:ring-neutral-900/10 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100 dark:placeholder:text-neutral-600 dark:focus:border-neutral-400 dark:focus:ring-neutral-400/10';
+    'w-full rounded-xl border border-[var(--border)] bg-(--card) px-3 py-2 text-sm text-[var(--foreground)] shadow-sm transition-colors placeholder:text-neutral-400 focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/20';
 
 const buttonPrimary =
-    'inline-flex items-center justify-center gap-2 rounded-lg bg-neutral-900 px-3.5 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100 dark:focus-visible:ring-white dark:focus-visible:ring-offset-neutral-950';
+    'inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--primary-foreground)] shadow-sm transition-all hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
 
 const buttonSecondary =
-    'inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-200 bg-white px-3.5 py-2 text-sm font-medium text-neutral-800 shadow-sm transition-all hover:border-neutral-300 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:border-neutral-700 dark:hover:bg-neutral-800 dark:focus-visible:ring-neutral-600 dark:focus-visible:ring-offset-neutral-950';
+    'inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-[var(--border)] bg-(--card) px-3.5 py-2 text-sm font-medium text-[var(--foreground)] shadow-sm transition-all hover:bg-[var(--muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--secondary)] focus-visible:ring-offset-2';
 
 const buttonDanger =
-    'inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 hover:text-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 dark:text-red-400 dark:hover:bg-red-950/40 dark:hover:text-red-300';
+    'inline-flex cursor-pointer items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[var(--destructive)] transition-colors hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--destructive)]';
 
 const cardClass =
-    'rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900';
+    'rounded-2xl border border-[var(--border)] bg-(--card) p-5 shadow-sm transition-shadow hover:shadow-md';
 
 function Field({
     label,
@@ -184,7 +184,7 @@ export default function WeatherAdminPanel() {
     const savedStatus = status.startsWith('Gespeichert');
 
     return (
-        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
+        <div className="min-h-screen bg-[var(--background)]">
             <main className="mx-auto max-w-4xl space-y-8 px-6 py-10">
                 {/* Header */}
                 <header className="flex flex-wrap items-end justify-between gap-4">

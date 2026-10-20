@@ -11,3 +11,7 @@ out
 # Layer-Konfiguration kann API-Keys enthalten
 server/data/layers.json
 server/data/weather.json
+
+# editor
+.editorconfig
+.vscode

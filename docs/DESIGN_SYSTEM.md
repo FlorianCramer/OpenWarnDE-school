@@ -24,27 +24,28 @@ Die öffentliche Anwendung läuft lokal auf `http://localhost:3000`. Die getrenn
 
 ### 3.1 Farben und Design-Tokens
 
-Die primäre Designfarbe ist ein gut lesbarer Blauton. Hintergründe sind überwiegend hell und weiß beziehungsweise leicht gebrochen weiß. Das UI soll freundlich, ruhig und sachlich wirken.
+Die Hauptfarbe des Adminbereichs ist Orange (#FF5900), die Sekundärfarbe ist Blau (#007DCC). Hintergründe sind überwiegend hell und weiß beziehungsweise leicht gebrochen weiß. Das UI soll freundlich, ruhig und sachlich wirken.
 
-Die Basisfarben werden als semantische Tokens definiert. Im Client werden sie in `client/src/app/globals.css` geführt. Für die Admin-Oberfläche sind dieselben semantischen Werte zu übernehmen oder über eine gemeinsame Token-Quelle konsistent abzubilden.
+Alle Farbwerte werden zentral in der `global.css` der jeweiligen Anwendung als CSS-Variablen definiert. Für den Adminbereich ist `global.css` die verbindliche Quelle der Farbdefinitionen. Komponenten dürfen Farben nicht unabhängig davon fest codieren. Client und Admin können getrennte globale Stylesheets besitzen; die semantischen Werte müssen konsistent dokumentiert sein.
 
-| Token                  | Zweck                                                         |
-| ---------------------- | ------------------------------------------------------------- |
-| `--background`         | Heller Seiten- und Panelhintergrund                           |
-| `--foreground`         | Primärtext mit ausreichendem Kontrast                         |
-| `--primary`            | Primäre Aktion, aktive Auswahl und Fokusakzent                |
-| `--primary-foreground` | Text und Icons auf primären Flächen                           |
-| `--border`             | Dezente Rahmen und Trennlinien                                |
-| `--muted`              | Zurückhaltende Sekundärflächen                                |
-| `--muted-foreground`   | Sekundärtexte und ergänzende Informationen                    |
-| `--card`               | Hintergrund von Karten und Panels                             |
-| `--destructive`        | Destruktive Aktionen und kritische Fehlersituationen          |
-| `--success`            | Erfolgszustände, immer zusätzlich textlich gekennzeichnet     |
-| `--warning`            | Allgemeine Warnhinweise außerhalb der fachlichen Radarlegende |
+| Token                  | Zweck                                                                      |
+| ---------------------- | -------------------------------------------------------------------------- |
+| `--background`         | Heller Seiten- und Panelhintergrund                                        |
+| `--foreground`         | Primärtext mit ausreichendem Kontrast                                      |
+| `--primary`            | Primäre Aktion, aktive Auswahl und Fokusakzent                             |
+| `--secondary`          | Sekundärfarbe Blau (#007DCC) für sekundäre Aktionen und ergänzende Akzente |
+| `--primary-foreground` | Text und Icons auf primären Flächen                                        |
+| `--border`             | Dezente Rahmen und Trennlinien                                             |
+| `--muted`              | Zurückhaltende Sekundärflächen                                             |
+| `--muted-foreground`   | Sekundärtexte und ergänzende Informationen                                 |
+| `--card`               | Hintergrund von Karten und Panels                                          |
+| `--destructive`        | Destruktive Aktionen und kritische Fehlersituationen                       |
+| `--success`            | Erfolgszustände, immer zusätzlich textlich gekennzeichnet                  |
+| `--warning`            | Allgemeine Warnhinweise außerhalb der fachlichen Radarlegende              |
 
 **Farbregeln:**
 
-- Blau ist die primäre UI-Farbe und wird für primäre Aktionen, aktive Zustände und ausgewählte Elemente verwendet.
+- Orange (#FF5900) ist die Hauptfarbe und wird für primäre Aktionen und wichtige aktive Zustände verwendet. Blau (#007DCC) ist die Sekundärfarbe und wird für sekundäre Aktionen und ergänzende Akzente eingesetzt.
 - Der Hintergrund ist weiß oder ein sehr heller neutraler Farbton.
 - Flächen, Rahmen und Schatten bleiben dezent. Starke Verläufe, übermäßige Schatten und unnötig bunte Oberflächen werden vermieden.
 - Rot ist für hohe Dringlichkeit, Fehler mit Handlungsbedarf und destruktive Aktionen reserviert.
@@ -54,8 +55,8 @@ Die Basisfarben werden als semantische Tokens definiert. Im Client werden sie in
 
 ### 3.2 Typografie
 
-- Systemschriftstack für eine schnelle und plattformnahe Darstellung.
-- Externe Schriftanbieter sind nicht erforderlich; verwendete Schriftdateien werden lokal bereitgestellt.
+- Verwendete Schriftarten müssen als Dateien im Repository liegen und von der Anwendung lokal geladen werden. Wenn eine Drittanbieter-Schrift eingesetzt wird, sind die benötigten Font-Dateien inklusive Lizenzhinweisen mit dem Projekt zu versionieren.
+- Schriftarten dürfen zur Laufzeit weder von externen Anbietern noch von CDNs geladen werden. Ein Systemschriftstack ist nur zulässig, wenn bewusst keine lokale Schriftdatei benötigt wird.
 - Seitentitel sind kurz und eindeutig.
 - Bereichstitel besitzen eine klare Hierarchie und können semibold dargestellt werden.
 - Warnungstitel sind gut lesbar und werden nicht ausschließlich in Versalien dargestellt.
@@ -325,3 +326,75 @@ Lokale UI-Komponenten sind eine Voraussetzung für die Offline-Fähigkeit der Be
 - Die Offline-Prüfung muss mindestens die Darstellung der Anwendung ohne externe UI-Ressourcen abdecken.
 - Client und Admin werden auf kleinen und großen Displays sowie mit Tastaturbedienung getestet.
 - Änderungen an der visuellen Sprache werden in dieser Datei und bei Bedarf in den API-/Fachdokumenten nachgeführt.
+
+## 12. Verbindliche Zusatzregeln für den Adminbereich
+
+Diese Regeln gelten verbindlich für die eigenständige Admin-Anwendung und ergänzen die allgemeinen Design- und Entwicklungsregeln aus den vorherigen Abschnitten.
+
+### 12.1 Eigene UI-Komponenten
+
+- Für sämtliche UI-Elemente sind eigene, projektinterne Komponenten zu verwenden oder zu erstellen.
+- Vor der Erstellung einer neuen Komponente ist zu prüfen, ob eine passende Komponente unter `admin/src/components/ui/` bereits existiert.
+- Wiederverwendbare Grundelemente wie Buttons, Eingabefelder, Tabellen, Dialoge, Menüs, Badges, Toasts und Formulare werden in `admin/src/components/ui/` gepflegt.
+- Fachliche Admin-Komponenten, beispielsweise `AdminWarningForm`, `AdminWarningTable`, `PublishWarningDialog` oder `PushAction`, liegen außerhalb von `components/ui/` und setzen die lokalen UI-Basiskomponenten zusammen.
+- UI-Bibliotheken von Drittanbietern dürfen nicht direkt als Laufzeit-UI eingebunden werden. Falls Quellcode einer Drittanbieter-Komponente übernommen wird, muss er lokal im Repository liegen, an das eigene Designsystem angepasst sein und die jeweilige Lizenz erfüllen.
+- Komponenten müssen zugänglich, responsiv, testbar und unabhängig von extern geladenen Ressourcen funktionieren.
+
+### 12.2 Lokale Abhängigkeiten und Ressourcen
+
+- Alle zur Darstellung oder Bedienung der Admin-Oberfläche benötigten Ressourcen müssen im Repository vorhanden und versioniert sein.
+- Das gilt insbesondere für Schriftdateien, Icons, Bilder, Stylesheets, Skripte und gegebenenfalls übernommene Bibliotheksquellen.
+- Lokal gespeicherte Schriftdateien müssen über lokale Pfade eingebunden und tatsächlich von der Anwendung verwendet werden. Eine Font-Datei lediglich im Repository abzulegen, ohne sie lokal einzubinden, erfüllt diese Vorgabe nicht.
+- Externe CDN-Links, Remote-Fonts, externe Icon-CDNs und zur Laufzeit geladene UI-Skripte sind verboten.
+- Versionsstände, Lizenzinformationen und erforderliche Copyright-Hinweise für übernommene Drittanbieter-Ressourcen sind nachvollziehbar zu dokumentieren.
+- Abhängigkeiten werden kontrolliert über das Projekt und dessen Paketverwaltung verwaltet. Die Admin-Oberfläche darf für ihre Darstellung nicht von einer externen Verfügbarkeit abhängig sein.
+
+### 12.3 Kein externer Internetzugriff im laufenden Betrieb
+
+- Die Admin-Oberfläche darf im laufenden Betrieb keine externen Internetdienste für UI, Schriftarten, Icons, Stylesheets, Skripte, Telemetrie oder sonstige Darstellungsfunktionen aufrufen.
+- Statische Ressourcen werden ausschließlich lokal ausgeliefert.
+- Die Admin-Anwendung kommuniziert fachlich ausschließlich mit dem vorgesehenen OpenWarnDE-Backend/API unter `http://localhost:8080` beziehungsweise mit der für die jeweilige Umgebung ausdrücklich konfigurierten internen Backend-Adresse.
+- Direkte Aufrufe externer APIs aus der Admin-Oberfläche sind nicht zulässig. Falls externe Daten fachlich benötigt werden, müssen diese über einen ausdrücklich vorgesehenen Backend-Prozess bereitgestellt werden.
+- Die Einschränkung betrifft externe Internetdienste. Sie bedeutet nicht automatisch, dass aktuelle Backend-Daten ohne erreichbares Backend verfügbar sind. Bei fehlender Backend-Verbindung muss die Oberfläche einen klaren Fehler- oder Offline-Zustand anzeigen und darf keine erfolgreiche Speicherung, Veröffentlichung oder Versandaktion vortäuschen.
+
+### 12.4 Getrennte UI- und Anwendungslogik
+
+- Öffentlicher Client und Adminbereich sind getrennte Anwendungen mit jeweils eigener UI-Struktur, Komponentenimplementierung, Navigation, Zustandsverwaltung und anwendungsspezifischer Darstellungslogik.
+- UI-Komponenten oder UI-Zustände des öffentlichen Clients dürfen nicht direkt in den Adminbereich importiert werden und umgekehrt.
+- Gemeinsame visuelle Grundlagen wie Farbwerte und semantische Design-Tokens dürfen konsistent dokumentiert oder technisch gemeinsam bereitgestellt werden. Daraus folgt keine gemeinsame UI- oder Geschäftslogik.
+- Die Admin-Oberfläche ist für Verwaltungsaufgaben optimiert, insbesondere Tabellen, Filter, Formulare, Validierung, Statusanzeigen und bestätigungspflichtige Aktionen.
+- Fachliche Regeln und sicherheitsrelevante Berechtigungen müssen serverseitig durchgesetzt werden. Eine Trennung oder Ausblendung in der UI ersetzt keine Backend-Autorisierung.
+- Die Admin-Oberfläche hält keine eigene maßgebliche Kopie fachlicher Daten. Der autoritative Zustand kommt vom Backend und wird nach relevanten Änderungen erneut geladen.
+
+### 12.5 Verbindliche Farbdefinitionen
+
+Die Farbwerte des Adminbereichs werden zentral in der `global.css` definiert. Komponenten verwenden die CSS-Variablen und keine abweichenden, direkt eingetragenen Markenfarben.
+
+| Bedeutung                 | Farbwert                   | Token           |
+| ------------------------- | -------------------------- | --------------- |
+| Hauptfarbe                | `#FF5900`                  | `--primary`     |
+| Sekundärfarbe             | `#007DCC`                  | `--secondary`   |
+| Seitenhintergrund         | heller Neutralton          | `--background`  |
+| Primärtext                | kontrastreicher Neutralton | `--foreground`  |
+| Rahmen                    | dezenter Neutralton        | `--border`      |
+| Fehler/destruktive Aktion | semantisches Rot           | `--destructive` |
+| Erfolg                    | semantisches Grün          | `--success`     |
+
+- Orange ist für primäre Aktionen und die wichtigsten UI-Akzente vorgesehen.
+- Blau wird für sekundäre Aktionen und ergänzende Akzente verwendet.
+- Statusfarben wie Fehler, Erfolg und Warnung behalten ihre semantische Bedeutung und dürfen nicht allein anhand der Markenfarben dargestellt werden.
+- Text- und Icon-Kontraste müssen die Anforderungen aus Abschnitt 5 erfüllen. Bei unzureichendem Kontrast ist eine passende kontrastreiche Vordergrundfarbe zu verwenden, ohne die zentralen Markenfarbwerte willkürlich zu verändern.
+- Neue Farbwerte oder zusätzliche Farbvarianten werden zuerst als semantische CSS-Variablen in `global.css` definiert und dokumentiert.
+
+### 12.6 Qualitätsprüfung vor Abschluss
+
+Vor dem Abschluss einer Änderung am Adminbereich ist zu prüfen:
+
+- [ ] UI-Elemente verwenden vorhandene eigene Komponenten oder neu erstellte lokale Komponenten.
+- [ ] Es werden keine UI-Komponenten oder statischen Ressourcen zur Laufzeit von externen Quellen geladen.
+- [ ] Schriftarten, Icons und weitere benötigte Assets liegen lokal vor und werden lokal eingebunden.
+- [ ] Es gibt keine unbeabsichtigten externen Netzwerkanfragen aus dem Admin-Frontend.
+- [ ] Die UI-Logik bleibt vom öffentlichen Client getrennt.
+- [ ] Farben stammen aus den CSS-Variablen in `global.css`.
+- [ ] Tastaturbedienung, sichtbarer Fokus, verständliche Fehlermeldungen und responsive Darstellung sind geprüft.
+- [ ] Backend-Fehler und fehlende Verbindung werden sichtbar und korrekt behandelt.
