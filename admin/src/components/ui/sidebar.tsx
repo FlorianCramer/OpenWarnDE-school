@@ -151,7 +151,7 @@ export default function Sidebar({
 
     return (
         <div
-            className={`relative flex shrink-0 flex-col transition-[width] duration-300 ease-in-out ${
+            className={`relative flex h-full shrink-0 flex-col transition-[width] duration-300 ease-in-out ${
                 collapsed ? 'w-20' : 'w-64'
             }`}
         >
@@ -183,14 +183,14 @@ export default function Sidebar({
             <aside
                 aria-labelledby={`${navId}-title`}
                 className={`
-                    mx-3 mb-4 flex flex-1 flex-col overflow-hidden
-                    bg-(--card) shadow-md shadow-slate-900/10 ring-1 ring-[var(--border)]
+                    mx-3 mb-4 flex flex-1 min-h-0 flex-col overflow-hidden
+                    bg-[var(--card)] shadow-md shadow-slate-900/10 ring-1 ring-[var(--border)]
                     transition-[border-radius] duration-300 ease-in-out
                     ${collapsed ? 'rounded-[28px]' : 'rounded-3xl'}
                 `}
             >
                 {/* Obere Leiste mit Text links und Button im eingeklappten Zustand exakt mittig */}
-                <div className="flex h-10 w-full items-center mb-1 pt-1">
+                <div className="flex h-10 w-full shrink-0 items-center mb-1 pt-1">
                     <div
                         className={`flex-1 overflow-hidden whitespace-nowrap transition-[max-width,opacity] duration-300 ease-in-out ${
                             collapsed
@@ -238,7 +238,7 @@ export default function Sidebar({
                 <nav
                     id={`${navId}-title`}
                     aria-label={title || 'Hauptnavigation'}
-                    className="flex flex-1 flex-col gap-1 p-2 pt-0"
+                    className="flex flex-1 min-h-0 flex-col gap-1 p-2 pt-0 overflow-y-auto"
                 >
                     {items.map((item) => (
                         <SidebarNavRow
