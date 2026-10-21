@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
+import LoginForm from '@/components/auth/login-form';
 
 export const metadata: Metadata = {
     title: 'Startseite',
@@ -14,12 +14,7 @@ export default function HomePage() {
                     Öffne den geschützten Verwaltungsbereich, um Dashboard, Layer und Warnungen zu
                     verwalten.
                 </p>
-                <Link
-                    href="/admin/"
-                    className="mt-8 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-[var(--primary)] px-4 py-2.5 text-sm font-semibold text-[var(--primary-foreground)] shadow-sm transition hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
-                >
-                    Zum Admin-Bereich
-                </Link>
+                <LoginForm />
             </section>
         </main>
     );

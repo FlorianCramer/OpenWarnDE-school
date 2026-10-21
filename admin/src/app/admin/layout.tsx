@@ -1,4 +1,6 @@
+'use client';
 import type { ReactNode } from 'react';
+import { signOut } from 'firebase/auth';
 import Sidebar, { type SidebarItem } from '@/components/ui/sidebar';
 import Headbar, { type UserMenuItem } from '@/components/ui/headbar';
 import {
@@ -11,6 +13,14 @@ import {
     IconUserAccount,
     IconDevices,
 } from '@/components/ui/icon';
+import AdminAuthGate from '@/components/auth/protected-admin';
+import { auth } from '@/lib/firebase';
+
+function logout() {
+    return signOut(auth).then(() => {
+        window.location.href = '/';
+    });
+}
 
 // ── Navigation ────────────────────────────────────────────────────────────────
 
@@ -22,7 +32,7 @@ const adminNavigation: SidebarItem[] = [
 ];
 
 const adminFooterNavigation: SidebarItem[] = [
-    { label: 'Ausloggen', href: '/', icon: <IconLogout /> },
+    { label: 'Ausloggen', onClick: logout, icon: <IconLogout /> },
 ];
 
 // ── User-Menü (per Dropdown) ──────────────────────────────────────────────────
@@ -31,40 +41,42 @@ const userMenuItems: UserMenuItem[] = [
     { label: 'Mein Account', href: '/admin/account', icon: <IconUserAccount /> },
     { label: 'Geräte', href: '/admin/devices', icon: <IconDevices /> },
     { label: 'trenner', divider: true },
-    { label: 'Ausloggen', href: '/', icon: <IconLogout />, danger: true },
+    { label: 'Ausloggen', onClick: logout, icon: <IconLogout />, danger: true },
 ];
 
 // ── Layout ────────────────────────────────────────────────────────────────────
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
     return (
-        <div className="flex h-screen overflow-hidden bg-[var(--background)]">
-            <Sidebar
-                logo={<AppLogo />}
-                title="OpenWarnDE"
-                subtitle="Administration"
-                collapseLabel="Tabs"
-                items={adminNavigation}
-                footerItems={adminFooterNavigation}
-            />
+        <AdminAuthGate>
+            <div className="flex h-screen overflow-hidden bg-[var(--background)]">
+                <Sidebar
+                    logo={<AppLogo />}
+                    title="OpenWarnDE"
+                    subtitle="Administration"
+                    collapseLabel="Tabs"
+                    items={adminNavigation}
+                    footerItems={adminFooterNavigation}
+                />
 
-            <div className="flex min-w-0 flex-1 flex-col h-full overflow-hidden">
-                <div className="shrink-0">
-                    <Headbar
-                        userMenuItems={userMenuItems}
-                        routeLabels={{
-                            admin: 'Admin',
-                            dashboard: 'Dashboard',
-                            layers: 'Layer-Verwaltung',
-                            warnings: 'Warnungen',
-                        }}
-                    />
+                <div className="flex min-w-0 flex-1 flex-col h-full overflow-hidden">
+                    <div className="shrink-0">
+                        <Headbar
+                            userMenuItems={userMenuItems}
+                            routeLabels={{
+                                admin: 'Admin',
+                                dashboard: 'Dashboard',
+                                layers: 'Layer-Verwaltung',
+                                warnings: 'Warnungen',
+                            }}
+                        />
+                    </div>
+
+                    <main className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 md:px-8 md:pb-8">
+                        {children}
+                    </main>
                 </div>
-
-                <main className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 md:px-8 md:pb-8">
-                    {children}
-                </main>
             </div>
-        </div>
+        </AdminAuthGate>
     );
 }
