@@ -23,7 +23,11 @@ export default function LoginForm() {
         } catch (err: unknown) {
             if (err && typeof err === 'object' && 'code' in err) {
                 const code = (err as { code: string }).code;
-                if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
+                if (
+                    code === 'auth/invalid-credential' ||
+                    code === 'auth/wrong-password' ||
+                    code === 'auth/user-not-found'
+                ) {
                     setError('E-Mail-Adresse oder Passwort ist falsch.');
                 } else if (code === 'auth/too-many-requests') {
                     setError('Zu viele Fehlversuche. Bitte warte einen Moment.');
@@ -41,7 +45,10 @@ export default function LoginForm() {
     return (
         <form onSubmit={submit} className="mt-8 space-y-5" noValidate>
             <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium text-[var(--foreground)] text-left">
+                <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-[var(--foreground)] text-left"
+                >
                     E-Mail-Adresse
                 </label>
                 <input
@@ -59,7 +66,10 @@ export default function LoginForm() {
 
             <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                    <label htmlFor="password" className="block text-sm font-medium text-[var(--foreground)] text-left">
+                    <label
+                        htmlFor="password"
+                        className="block text-sm font-medium text-[var(--foreground)] text-left"
+                    >
                         Passwort
                     </label>
                 </div>
@@ -77,9 +87,9 @@ export default function LoginForm() {
             </div>
 
             {error && (
-                <div 
-                    role="alert" 
-                    aria-live="polite" 
+                <div
+                    role="alert"
+                    aria-live="polite"
                     className="animate-in fade-in slide-in-from-top-1 rounded-xl bg-red-50 p-3.5 text-sm font-medium text-red-600 ring-1 ring-inset ring-red-500/20"
                 >
                     {error}
@@ -92,9 +102,24 @@ export default function LoginForm() {
                 className="group relative mt-2 flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 font-semibold text-white shadow-md shadow-[var(--primary)]/20 transition-all hover:shadow-lg hover:shadow-[var(--primary)]/30 hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
             >
                 {loading && (
-                    <svg className="h-4 w-4 animate-spin text-white" viewBox="0 0 24 24" fill="none">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    <svg
+                        className="h-4 w-4 animate-spin text-white"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+                        <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                        />
+                        <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
                     </svg>
                 )}
                 {loading ? 'Anmeldung läuft …' : 'Anmelden'}

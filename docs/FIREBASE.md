@@ -51,7 +51,10 @@ service cloud.firestore {
   match /databases/{database}/documents {
     match /user/{userId} {
       allow read: if request.auth != null && request.auth.uid == userId;
-      allow write: if false;
+      allow update: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['display_name', 'email']);
+      allow create, delete: if false;
     }
     match /data_warnings/{warningId} {
       allow read: if request.auth != null;
