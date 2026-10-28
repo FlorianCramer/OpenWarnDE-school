@@ -18,3 +18,6 @@ server/data/weather.json
 
 # ai
 CLAUDE.md
+AGENTS.md
+.agents
+skills-lock.json
