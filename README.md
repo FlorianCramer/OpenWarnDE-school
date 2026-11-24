@@ -31,7 +31,7 @@ OpenWarnDE 2.0 ist die Neukonzeption und prototypische Entwicklung einer Warn- u
 Das Projekt ist ein **modularer Monolith** mit drei getrennten Anwendungen:
 
 | Anwendung       | Adresse          | Verantwortung                                           |
-|-----------------|------------------|---------------------------------------------------------|
+| --------------- | ---------------- | ------------------------------------------------------- |
 | **Client**      | `localhost:3000` | Öffentliche Karte, Standort, Suche, Layer, Warnungen    |
 | **Admin-UI**    | `localhost:3001` | Verwaltung: Warnungen bearbeiten, Push auslösen         |
 | **API/Backend** | `localhost:8080` | Authentifizierung, Datenverarbeitung, Warnlogik, Wetter |

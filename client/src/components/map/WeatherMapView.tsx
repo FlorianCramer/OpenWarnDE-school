@@ -84,8 +84,25 @@ export default function WeatherMapView() {
                 ],
             },
         });
-        map.addControl(new maplibregl.NavigationControl(), 'top-right');
         mapRef.current = map;
+        const handleMapAction = (event: Event) => {
+            const action = (
+                event as CustomEvent<
+                    'zoom-in' | 'zoom-out' | { longitude: number; latitude: number }
+                >
+            ).detail;
+            if (typeof action === 'object') {
+                map.flyTo({
+                    center: [action.longitude, action.latitude],
+                    zoom: 12,
+                    essential: true,
+                });
+                return;
+            }
+            if (action === 'zoom-in') map.zoomIn({ duration: 250 });
+            if (action === 'zoom-out') map.zoomOut({ duration: 250 });
+        };
+        window.addEventListener('openwarnde:map-action', handleMapAction);
 
         map.on('load', () => {
             addRadarLayer(map, radarRef.current);
@@ -97,6 +114,7 @@ export default function WeatherMapView() {
 
         return () => {
             markerManagerRef.current?.destroy(map);
+            window.removeEventListener('openwarnde:map-action', handleMapAction);
             map.remove();
             mapRef.current = null;
         };

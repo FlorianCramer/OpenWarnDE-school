@@ -25,7 +25,7 @@ const DEFAULT_ROUTE_LABELS: Record<string, string> = {
     settings: 'Einstellungen',
     users: 'Benutzer',
     account: 'Mein Account',
-    devices: 'Geräte'
+    devices: 'Geräte',
 };
 
 const DEFAULT_USER_MENU: UserMenuItem[] = [{ label: 'Abmelden' }];
