@@ -2,10 +2,31 @@
 import { CloudRain, Eye, EyeOff } from 'lucide-react';
 import { useWeather } from './WeatherContext';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import { apiUrl } from '@/lib/api';
+type Warning = {
+    id: string;
+    title: string;
+    description: string;
+    priority: string;
+    area: string;
+    source: string;
+};
 export default function InfoPanel() {
     const { weather, loading, error } = useWeather();
     const [minimized, setMinimized] = useState(false);
     const [visible, setVisible] = useState(true);
+    const [warnings, setWarnings] = useState<Warning[]>([]);
+    useEffect(() => {
+        fetch(apiUrl('/api/v1/warnings'))
+            .then(async (response) =>
+                response.ok
+                    ? ((await response.json()) as { warnings?: Warning[] })
+                    : { warnings: [] },
+            )
+            .then((body) => setWarnings(body.warnings ?? []))
+            .catch(() => setWarnings([]));
+    }, []);
     if (loading)
         return (
             <div className="absolute bottom-5 right-5 z-10 rounded-3xl bg-white/95 px-5 py-4 text-sm shadow-xl md:bottom-7 md:right-7">
@@ -90,6 +111,27 @@ export default function InfoPanel() {
                                 : 'Noch kein API-Abgleich'}
                         </span>
                     </div>
+                    {warnings.length > 0 && (
+                        <div className="mt-4 space-y-2" aria-label="Aktive Warnungen">
+                            <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                Aktive Warnungen
+                            </h3>
+                            {warnings.slice(0, 3).map((warning) => (
+                                <article
+                                    key={warning.id}
+                                    className="rounded-2xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-xs"
+                                >
+                                    <strong className="block">{warning.title}</strong>
+                                    <span className="text-slate-600">
+                                        {warning.area} · {warning.source}
+                                    </span>
+                                    {warning.description && (
+                                        <p className="mt-1 text-slate-700">{warning.description}</p>
+                                    )}
+                                </article>
+                            ))}
+                        </div>
+                    )}
                 </>
             )}
         </section>

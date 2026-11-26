@@ -11,7 +11,7 @@
 | Was?                                 | Termine A-Turnus    | Termine B-Turnus    | Status |
 | ------------------------------------ | ------------------- | ------------------- | ------ |
 | Projektantrag                        | Fr, 28.8.26         | Fr, 11.09.26        | Done   |
-| Soll-/Ist-Analyse und Projektplanung | So, 27.11.26        | So, 13.12.26        |        |
+| Soll-/Ist-Analyse und Projektplanung | So, 29.11.26        | So, 13.12.26        |        |
 | komplette Projektdokumentation       | So, 24.01.27        | So, 27.12.26        |        |
 | Projektpräsentation                  | 25.01.27 - 29.01.27 | 22.02.27 - 26.02.27 |        |
 

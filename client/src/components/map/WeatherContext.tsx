@@ -28,7 +28,18 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
             .catch(() => null);
         Promise.all([weatherRequest, radarRequest])
             .then(([body, radar]) => {
-                if (!cancelled) setWeather(body.weather ? { ...body.weather, radar } : null);
+                if (!cancelled) {
+                    // The product timestamp becomes the cache key for MapLibre's tile cache.
+                    // This keeps stable tiles reusable while invalidating the whole product once.
+                    const cacheKey = radar?.timestamp
+                        ? `?product=${encodeURIComponent(radar.timestamp)}`
+                        : '';
+                    setWeather(
+                        body.weather
+                            ? { ...body.weather, radar, tileUrl: body.weather.tileUrl + cacheKey }
+                            : null,
+                    );
+                }
             })
             .catch(() => {
                 if (!cancelled) setError('Wetterserver nicht erreichbar');

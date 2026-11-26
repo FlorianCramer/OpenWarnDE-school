@@ -6,6 +6,16 @@
 
 **Neukonzeption und prototypische Entwicklung der Warn- und Lageinformationsplattform OpenWarnDE 2.0**
 
+### 1.2 Einführung in OpenWarnDE und OpenWarnDEV
+
+OpenWarnDE ist das Konzept einer Warn- und Lageinformationsplattform. Die Plattform soll Warnungen, Wetterinformationen und weitere lagebezogene Informationen übersichtlich auf einer interaktiven Karte darstellen. Bürgerinnen und Bürger sollen Informationen über einen öffentlichen Client abrufen können. Verwaltungsberechtigte sollen Warnungen über eine getrennte Verwaltungsoberfläche erstellen und verwalten können.
+
+OpenWarnDEV bezeichnet das bisher entwickelte Entwicklungs- und Prototypsystem. Es enthält bereits wichtige technische Grundlagen, insbesondere eine interaktive Kartenansicht, eine Standortermittlung und eine für verschiedene Endgeräte geeignete Client-Anwendung. Die Anwendung ist über einen längeren Zeitraum gewachsen und entspricht deshalb noch nicht vollständig der geplanten Zielarchitektur.
+
+OpenWarnDE 2.0 bezeichnet die geplante Neukonzeption dieses Systems. Geeignete Bestandteile von OpenWarnDEV werden wiederverwendet. Gleichzeitig werden Verantwortlichkeiten, Schnittstellen und die technische Struktur neu geordnet. Das Ziel ist eine modular aufgebaute Plattform mit getrenntem öffentlichem Client, eigenständiger Verwaltungsoberfläche und zentralem API-/Backendserver.
+
+Im Rahmen dieses Projekts ist OpenWarnDE 2.0 kein produktiver behördlicher Echtzeit-Warndienst. Es handelt sich um einen prototypischen MVP, mit dem die fachlichen Abläufe und die technische Architektur überprüft werden.
+
 Ausgangspunkt des Projekts ist das bestehende OpenWarnDEV-System. Dieses stellt bereits grundlegende Funktionen einer Warn- und Lageinformationsplattform bereit. Dazu gehören insbesondere eine interaktive Kartenansicht, die Ermittlung des eigenen Standorts sowie die Nutzung auf verschiedenen Endgeräten.
 
 Ziel des Projekts ist die Untersuchung und strukturierte Weiterentwicklung des bestehenden Systems zu einer neuen Version OpenWarnDE 2.0. Dabei sollen geeignete Bestandteile übernommen und weiterverwendet werden. Nicht geeignete oder technisch überholte Ansätze sollen überarbeitet oder durch neue Lösungen ersetzt werden.
@@ -23,6 +33,16 @@ Das Projekt wird im Rahmen des Lernfeldes LF12 an der Berufsschule durchgeführt
 ### 2.2 Technisches Umfeld
 
 Die Entwicklung erfolgt lokal auf einem Entwicklungsrechner. Zur Versionsverwaltung wird GitHub genutzt. Als Technologien kommen Next.js, React, TypeScript, MapLibre GL JS, Capacitor und Firebase zum Einsatz. Die Anwendung wird als Web-Client sowie optional als mobile Anwendung über Capacitor bereitgestellt.
+
+Für die lokale Entwicklung werden drei getrennte Prozesse vorgesehen:
+
+| Bestandteil         | Lokale Adresse   | Verantwortung                                                                          |
+|---------------------|------------------|----------------------------------------------------------------------------------------|
+| Öffentlicher Client | `localhost:3000` | Darstellung, Kartenbedienung, Standort, Suche und öffentliche Warnungsansicht          |
+| Verwaltungs-UI      | `localhost:3001` | Verwaltungsformulare, Tabellen, Statusanzeigen und bestätigungspflichtige Aktionen     |
+| API-/Backendserver  | `localhost:8080` | API, Authentifizierung, Autorisierung, Datenverarbeitung, Warnungen und Push-Anbindung |
+
+Die Verwaltungs-UI ist kein Backend. Sie greift ausschließlich über die API auf Daten und Verwaltungsfunktionen zu. Auch der öffentliche Client verarbeitet externe Wetter-, Layer- und Warnungsdaten nicht direkt, sondern bezieht sie über die API. API-Basis-URLs, erlaubte Origins und spätere Firebase-Zieladressen werden über Umgebungsvariablen konfiguriert.
 
 ### 2.3 Zeitliches Umfeld
 
@@ -49,7 +69,7 @@ Für die weitere Entwicklung ergibt sich daraus das Problem, dass neue Funktione
 Die bestehende Anwendung verwendet unter anderem folgende Technologien:
 
 | Bereich            | Ist-Zustand                 |
-| ------------------ | --------------------------- |
+|--------------------|-----------------------------|
 | Frontend           | Next.js / React             |
 | Programmiersprache | TypeScript                  |
 | Kartenengine       | MapLibre GL JS              |
@@ -64,6 +84,8 @@ Die bestehende Anwendung verwendet unter anderem folgende Technologien:
 Die vorhandene Kartenfunktion ist bereits vergleichsweise weit entwickelt. Neben der grundlegenden Kartendarstellung existieren unter anderem 3D-Gelände, 3D-Gebäude, Kartensteuerungen, Standortanzeige und ein Deutschland-Fokus.
 
 Damit besitzt OpenWarnDEV bereits technische Bestandteile, die für OpenWarnDE 2.0 wiederverwendet werden können.
+
+Die in den technischen Dokumenten beschriebene Trennung in einen öffentlichen Client, eine eigenständige Admin-Anwendung und einen zentralen API-/Backendserver ist dagegen als Soll-Zustand beziehungsweise laufende Umstrukturierung zu verstehen. Sie darf nicht vollständig als bereits abgeschlossene Implementierung des bestehenden OpenWarnDEV-Systems dargestellt werden.
 
 ### 3.3 Technische Probleme
 
@@ -95,7 +117,7 @@ Aus der Untersuchung ergeben sich insbesondere folgende Problemfelder:
 
 OpenWarnDE 2.0 soll als modular aufgebaute Plattform konzipiert werden.
 
-Die zentrale Architektur besteht aus:
+Die zentrale Zielarchitektur besteht aus:
 
 - OpenWarnDE App
 - OpenWarnDE Web Platform
@@ -103,6 +125,8 @@ Die zentrale Architektur besteht aus:
 - OpenWarnDE API
 - zentraler Datenverarbeitung
 - externen Datenquellen
+
+Im lokalen Betriebsmodell werden die drei Bestandteile getrennt betrieben. Der Client auf Port 3000 und die Verwaltungs-UI auf Port 3001 sind Benutzeroberflächen. Der Server auf Port 8080 ist die einzige fachliche Integrations- und Verarbeitungsstelle für Datenquellen, Datenhaltung und sicherheitsrelevante Aktionen.
 
 Die App soll zukünftig ausschließlich als Client der Plattform fungieren. Die Verarbeitung externer Datenquellen soll zentral über das Backend erfolgen.
 
@@ -141,7 +165,7 @@ Dadurch soll die technische Komplexität des MVP begrenzt werden.
 ### 5.1 Funktionale Anforderungen
 
 | ID  | Anforderung                                                                   | Priorität |
-| --- | ----------------------------------------------------------------------------- | --------- |
+|-----|-------------------------------------------------------------------------------|-----------|
 | F01 | Die Anwendung muss eine interaktive Karte darstellen.                         | Muss      |
 | F02 | Der aktuelle Standort des Nutzers muss ermittelt und angezeigt werden können. | Muss      |
 | F03 | Die Karte muss durchsucht werden können.                                      | Muss      |
@@ -155,18 +179,24 @@ Dadurch soll die technische Komplexität des MVP begrenzt werden.
 | F11 | Die API soll versioniert aufgebaut werden.                                    | Soll      |
 | F12 | Eine spätere Erweiterung um weitere Betriebsmodi soll möglich sein.           | Kann      |
 
+Die Anforderungen F01 bis F08 beschreiben den fachlichen MVP-Umfang. Die Anforderungen F09 bis F12 beschreiben Erweiterbarkeit und Zielbild; sie gelten nicht automatisch als innerhalb des 80-Stunden-Projekts vollständig umgesetzt.
+
 ### 5.2 Nichtfunktionale Anforderungen
 
-| ID   | Anforderung                                                                                                   |
-| ---- | ------------------------------------------------------------------------------------------------------------- |
-| NF01 | Die Anwendung muss in mindestens drei fachlich getrennte Module unterteilt sein.                              |
-| NF02 | Die Architektur muss so gestaltet sein, dass neue Datenquellen ohne Änderung am Client ergänzt werden können. |
-| NF03 | Administrative Berechtigungen müssen serverseitig überprüfbar sein.                                           |
-| NF04 | Die API muss eine einheitliche, versionierte Schnittstelle bereitstellen.                                     |
-| NF05 | Die Anwendung muss auf unterstützten mobilen und webbasierten Endgeräten nutzbar sein.                        |
-| NF06 | Der Quellcode muss nachvollziehbar strukturiert und dokumentiert sein.                                        |
-| NF07 | Die Anwendung muss durch automatisierte und manuelle Tests abgesichert werden.                                |
-| NF08 | Externe Datenquellen müssen austauschbar bzw. erweiterbar sein.                                               |
+| ID   | Anforderung                                                                                                      |
+|------|------------------------------------------------------------------------------------------------------------------|
+| NF01 | Die Anwendung muss in mindestens drei fachlich getrennte Module unterteilt sein.                                 |
+| NF02 | Die Architektur muss so gestaltet sein, dass neue Datenquellen ohne Änderung am Client ergänzt werden können.    |
+| NF03 | Administrative Berechtigungen müssen serverseitig überprüfbar sein.                                              |
+| NF04 | Die API muss eine einheitliche, versionierte Schnittstelle bereitstellen.                                        |
+| NF05 | Die Anwendung muss auf unterstützten mobilen und webbasierten Endgeräten nutzbar sein.                           |
+| NF06 | Der Quellcode muss nachvollziehbar strukturiert und dokumentiert sein.                                           |
+| NF07 | Die Anwendung muss durch automatisierte und manuelle Tests abgesichert werden.                                   |
+| NF08 | Externe Datenquellen müssen austauschbar bzw. erweiterbar sein.                                                  |
+| NF09 | Client und Admin-UI müssen responsive sowie mit Tastatur und Touch bedienbar sein.                               |
+| NF10 | Datenabhängige Oberflächen müssen geeignete Lade-, Leer-, Fehler- und Erfolgszustände anzeigen.                  |
+| NF11 | Grundlegende UI-Ressourcen und UI-Komponenten müssen lokal im jeweiligen Anwendungsteil verfügbar sein.          |
+| NF12 | Sicherheitskritische Aktionen und Berechtigungen dürfen nicht nur durch die Benutzeroberfläche geschützt werden. |
 
 ---
 
@@ -186,6 +216,8 @@ Der Projektumfang wird bewusst begrenzt.
 - manuelles Erstellen von Warnungen
 - manuelles Auslösen von Push-Nachrichten
 - automatisierte und manuelle Qualitätssicherung
+- getrennte lokale Prozesse für Client, Admin-UI und API/Backend als technische Grundlage
+- nachvollziehbare Zustände für Laden, Erfolg, leere Ergebnisse, Fehler und fehlende Verbindung
 
 ### 6.2 Nicht Bestandteil des MVP
 
@@ -196,6 +228,8 @@ Der Projektumfang wird bewusst begrenzt.
 - vollständige Microservice-Infrastruktur
 - produktiver deutschlandweiter Betrieb
 - vollständige automatische Risikobewertung aller Datenquellen
+- produktiver behördlicher Warnbetrieb oder eine Garantie lebensrettender Echtzeitinformationen
+- vollständige Offline-Verfügbarkeit aktueller Warnungs-, Wetter- und Kartendaten
 
 Diese Funktionen können Bestandteil der langfristigen Weiterentwicklung sein, werden jedoch nicht innerhalb des 80-Stunden-Projektumfangs umgesetzt.
 
@@ -217,6 +251,8 @@ Die wichtigsten technischen Schnittstellen sind:
 - CI/CD ↔ Deployment
 
 ### 7.2 Organisatorische Schnittstellen
+
+Die lokalen Kommunikationswege sind eindeutig festgelegt: Der Client und die Admin-UI kommunizieren mit dem API-/Backendserver. Direkte Aufrufe externer Datenanbieter aus diesen Oberflächen sind nicht vorgesehen. Externe Quellen werden ausschließlich serverseitig über Adapter, Validierung und Normalisierung eingebunden.
 
 Das Projekt wird eigenständig durchgeführt. Die Entwicklungsplanung, Implementierung, Qualitätssicherung und Dokumentation liegen beim Projektbearbeiter.
 
@@ -242,7 +278,7 @@ Im schulischen Kontext erfolgt die Bewertung anhand der vorgegebenen Projekt- un
 Für die zukünftige Architektur wurden drei grundsätzliche Varianten betrachtet.
 
 | Variante | Beschreibung                                     | Vorteile                                                  | Nachteile                                         |
-| -------- | ------------------------------------------------ | --------------------------------------------------------- | ------------------------------------------------- |
+|----------|--------------------------------------------------|-----------------------------------------------------------|---------------------------------------------------|
 | A        | Bestehende OpenWarnDEV-Struktur weiterentwickeln | geringer initialer Aufwand, Wiederverwendung              | bestehende strukturelle Probleme bleiben bestehen |
 | B        | Vollständige Microservice-Architektur            | starke technische Trennung, hohe Skalierbarkeit           | hohe Komplexität, hoher Betriebsaufwand           |
 | C        | Modularer Monolith mit klaren Schnittstellen     | klare Struktur, geringere Komplexität, später erweiterbar | weniger physische Trennung als Microservices      |
@@ -313,6 +349,8 @@ Die API soll versioniert werden, beispielsweise:
 ```
 
 Dadurch können spätere Breaking Changes über eine neue API-Version eingeführt werden, ohne bestehende Clients unmittelbar zu verändern.
+
+Die API bildet die gemeinsame Grenze zwischen den Benutzeroberflächen und dem Backend. Sie liefert normalisierte fachliche Daten und hält Anbieterlogik, Zugangsdaten und externe API-Schlüssel vom Client fern.
 
 ---
 
@@ -394,7 +432,7 @@ Für die Umsetzung werden folgende Ressourcen benötigt:
 Die Zeitplanung orientiert sich an dem im Projektantrag festgelegten Gesamtaufwand von 80 Stunden. Die einzelnen Phasen werden in Unterpunkte aufgeteilt und jeweils mit einer eigenen zeitlichen Einschätzung versehen.
 
 |   Phase    | Tätigkeit                                                      |  Aufwand |
-| :--------: | -------------------------------------------------------------- | -------: |
+|:----------:|----------------------------------------------------------------|---------:|
 |   **1**    | **Analyse des bestehenden OpenWarnDEV-Systems**                |  **8 h** |
 |    1.1     | Analyse der Frontend-Struktur (Next.js / React)                |      2 h |
 |    1.2     | Analyse der Kartenfunktion (MapLibre GL JS)                    |      2 h |
@@ -461,7 +499,7 @@ Die Zeitplanung orientiert sich an dem im Projektantrag festgelegten Gesamtaufwa
 Die folgende Übersicht stellt dar, an welchen Stellen im Projektverlauf wirtschaftlich relevanter Nutzen entsteht.
 
 | Phase | Wirtschaftlicher Bezug                                                           |
-| :---: | -------------------------------------------------------------------------------- |
+|:-----:|----------------------------------------------------------------------------------|
 |   1   | Identifikation wiederverwendbarer Komponenten → spart später Entwicklungsaufwand |
 |   2   | Klare Anforderungen vermeiden spätere Nachbesserungskosten                       |
 |   3   | Strukturierte Architektur senkt langfristige Wartungskosten                      |
@@ -500,7 +538,7 @@ Besonders wichtig ist die Trennung zwischen Analyse und Implementierung. Die tec
 ## 15. Projektrisiken
 
 | Risiko                                             | Eintritt | Auswirkung | Gegenmaßnahme                                                                                                            |
-| -------------------------------------------------- | -------- | ---------- | ------------------------------------------------------------------------------------------------------------------------ |
+|----------------------------------------------------|----------|------------|--------------------------------------------------------------------------------------------------------------------------|
 | Bestehende Komponenten sind nicht wiederverwendbar | mittel   | mittel     | Frühzeitige technische Analyse der bestehenden Komponenten; bei Nichtverwendbarkeit frühzeitige Neuentwicklung einplanen |
 | MVP wird zu umfangreich                            | hoch     | hoch       | Klare Abgrenzung des MVP; regelmäßige Prüfung des Umfangs gegen die 80-Stunden-Planung                                   |
 | Backend-Aufwand wird unterschätzt                  | mittel   | hoch       | Zunächst modularer Monolith statt Microservices; schrittweise Erweiterung                                                |

@@ -1,6 +1,6 @@
 'use client';
 import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 import { apiUrl } from './weather-overlay';
 
@@ -10,14 +10,22 @@ export default function SearchBar() {
     const [results, setResults] = useState<SearchResult[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const submit = async (event: FormEvent) => {
-        event.preventDefault();
+    const [submitted, setSubmitted] = useState(false);
+    useEffect(() => {
         if (query.trim().length < 2) return;
+        const timer = window.setTimeout(() => {
+            void search(query.trim());
+        }, 350);
+        return () => window.clearTimeout(timer);
+    }, [query]);
+    async function search(value: string) {
+        if (value.length < 2) return;
+        setSubmitted(true);
         setLoading(true);
         setError(null);
         try {
             const response = await fetch(
-                apiUrl(`/api/v1/location/search?q=${encodeURIComponent(query.trim())}`),
+                apiUrl(`/api/v1/location/search?q=${encodeURIComponent(value)}`),
             );
             const body = (await response.json()) as { results?: SearchResult[]; error?: string };
             if (!response.ok) throw new Error(body.error ?? 'Suche fehlgeschlagen');
@@ -28,6 +36,10 @@ export default function SearchBar() {
         } finally {
             setLoading(false);
         }
+    }
+    const submit = async (event: FormEvent) => {
+        event.preventDefault();
+        await search(query.trim());
     };
     const selectResult = (result: SearchResult) => {
         window.dispatchEvent(new CustomEvent('openwarnde:map-action', { detail: result }));
@@ -48,7 +60,14 @@ export default function SearchBar() {
                 placeholder="Search"
                 aria-label="Ort suchen"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => {
+                    setQuery(event.target.value);
+                    if (event.target.value.trim().length < 2) {
+                        setResults([]);
+                        setSubmitted(false);
+                    }
+                }}
+                autoComplete="off"
             />
             {(loading || error || results.length > 0) && (
                 <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] rounded-2xl bg-white p-2 text-left shadow-xl">
@@ -66,6 +85,9 @@ export default function SearchBar() {
                                 {result.displayName}
                             </button>
                         ))}
+                    {!loading && !error && submitted && results.length === 0 && (
+                        <p className="px-3 py-2 text-xs text-slate-500">Kein Ort gefunden.</p>
+                    )}
                 </div>
             )}
         </form>
