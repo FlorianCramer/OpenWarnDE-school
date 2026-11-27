@@ -29,6 +29,7 @@ const adminNavigation: SidebarItem[] = [
     { label: 'Dashboard', href: '/admin/dashboard', icon: <IconDashboard /> },
     { label: 'Layer-Verwaltung', href: '/admin/layers', icon: <IconLayers /> },
     { label: 'Warnungen', href: '/admin/warnings', icon: <IconWarning /> },
+    { label: 'API-Keys', href: '/admin/api-keys', icon: <IconDevices /> },
 ];
 
 const adminFooterNavigation: SidebarItem[] = [
@@ -68,6 +69,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                                 dashboard: 'Dashboard',
                                 layers: 'Layer-Verwaltung',
                                 warnings: 'Warnungen',
+                                'api-keys': 'API-Keys',
                             }}
                         />
                     </div>

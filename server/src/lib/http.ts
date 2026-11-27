@@ -22,19 +22,21 @@ function allowedOrigin(request?: Request) {
 export function corsHeaders(request?: Request) {
     return {
         'Access-Control-Allow-Origin': allowedOrigin(request),
-        'Access-Control-Allow-Methods': 'GET,PUT,OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Methods': 'GET,POST,PUT,OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-API-Key',
         Vary: 'Origin',
     };
 }
 
 export function json(body: unknown, status = 200, request?: Request) {
+    const headers = {
+        ...corsHeaders(request),
+        'Cache-Control': 'no-store',
+    };
+    if (status === 204) return new Response(null, { status, headers });
     return NextResponse.json(body, {
         status,
-        headers: {
-            ...corsHeaders(request),
-            'Cache-Control': 'no-store',
-        },
+        headers,
     });
 }
 

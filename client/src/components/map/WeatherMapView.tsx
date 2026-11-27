@@ -8,12 +8,15 @@ import { useWeather } from './WeatherContext';
 import { useLocation } from './LocationContext';
 import { UserLocationMarkerManager } from './user-location-marker';
 import type { RadarMetadata } from './weather-overlay';
+import { apiUrl } from '@/lib/api';
 
 const CENTER: [number, number] = [10.4515, 51.1657];
 const BASE_SOURCE = 'openstreetmap-base-source';
 const BASE_LAYER = 'openstreetmap-base-layer';
 const RADAR_SOURCE = 'weather-radar-source';
 const RADAR_LAYER = 'weather-radar-layer';
+const WARNING_SOURCE = 'openwarnde-warning-source';
+const WARNING_LAYER = 'openwarnde-warning-layer';
 const MAPLIBRE_WORKER_URL = '/maplibre-gl-worker.mjs?v=6.12.0';
 
 function radarOpacity(opacity: number) {
@@ -41,6 +44,17 @@ function updateRadarOpacity(map: MapLibreMap, opacity: number) {
     if (map.getLayer(RADAR_LAYER)) {
         map.setPaintProperty(RADAR_LAYER, 'raster-opacity', radarOpacity(opacity));
     }
+}
+
+function updateWarnings(map: MapLibreMap, warnings: Array<{ id: string; title: string; area: GeoJSON.Polygon }>) {
+    const data: GeoJSON.FeatureCollection<GeoJSON.Polygon> = {
+        type: 'FeatureCollection',
+        features: warnings.map((warning) => ({ type: 'Feature', id: warning.id, properties: { title: warning.title }, geometry: warning.area })),
+    };
+    const source = map.getSource(WARNING_SOURCE) as maplibregl.GeoJSONSource | undefined;
+    if (source) { source.setData(data); return; }
+    map.addSource(WARNING_SOURCE, { type: 'geojson', data });
+    map.addLayer({ id: WARNING_LAYER, type: 'fill', source: WARNING_SOURCE, paint: { 'fill-color': '#dc2626', 'fill-opacity': 0.22, 'fill-outline-color': '#991b1b' } });
 }
 
 export default function WeatherMapView() {
@@ -111,6 +125,9 @@ export default function WeatherMapView() {
                 markerManagerRef.current?.update(map, locationRef.current);
             }
         });
+        fetch(apiUrl('/api/v1/warnings')).then((response) => response.json()).then((body) => {
+            if (map.isStyleLoaded()) updateWarnings(map, body.warnings ?? []);
+        }).catch(() => undefined);
 
         return () => {
             markerManagerRef.current?.destroy(map);

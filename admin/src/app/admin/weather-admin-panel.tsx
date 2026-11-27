@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import type { WeatherConfig, WeatherSource } from '@/lib/weather-schema';
 import { WEATHER_LEGEND_8 } from '@/lib/weather-palette';
 import { apiUrl } from '@/lib/api';
+import { auth } from '@/lib/firebase';
 
 function slug(name: string) {
     return (
@@ -94,9 +95,13 @@ export default function WeatherAdminPanel() {
     const [config, setConfig] = useState<WeatherConfig | null>(null);
     const [status, setStatus] = useState('');
     const [saving, setSaving] = useState(false);
+    const authenticatedFetch = async (url: string, options: RequestInit = {}) => {
+        const token = await auth.currentUser?.getIdToken();
+        return fetch(url, { ...options, headers: { ...(options.headers ?? {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) } });
+    };
 
     useEffect(() => {
-        fetch(apiUrl('/api/admin/config'))
+        authenticatedFetch(apiUrl('/api/admin/config'))
             .then(async (r) => {
                 const body = await r.json();
                 if (!r.ok) throw new Error(body.error);
@@ -141,7 +146,7 @@ export default function WeatherAdminPanel() {
         setSaving(true);
         setStatus('');
         try {
-            const r = await fetch(apiUrl('/api/admin/config'), {
+            const r = await authenticatedFetch(apiUrl('/api/admin/config'), {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(config),
